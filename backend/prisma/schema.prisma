@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// Enum for user roles (RBAC)
+enum Role {
+  STUDENT
+  MENTOR
+  ADMIN
+}
+
+// User model with authentication and RBAC
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hashed password
+  firstName String
+  lastName  String
+  role      Role     @default(STUDENT)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  certificates Certificate[]
+  mentorSessions Session[] @relation("MentorSessions")
+  studentSessions Session[] @relation("StudentSessions")
+
+  @@map("users")
+}
+
+// Certificate model for PDF generation
+model Certificate {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  description String?
+  issuedAt    DateTime @default(now())
+  pdfUrl      String?  // URL to stored PDF
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("certificates")
+}
+
+// Session model for mentor-student sessions
+model Session {
+  id          String   @id @default(uuid())
+  mentorId    String
+  studentId   String
+  title       String
+  description String?
+  scheduledAt DateTime
+  duration    Int      // Duration in minutes
+  status      String   @default("scheduled") // scheduled, completed, cancelled
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  mentor  User @relation("MentorSessions", fields: [mentorId], references: [id], onDelete: Cascade)
+  student User @relation("StudentSessions", fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
