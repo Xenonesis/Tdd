@@ -255,6 +255,10 @@ body {
    UTILITY CLASSES
    ============================================ */
 
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
 .text-gradient {
   background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-500) 100%);
   -webkit-background-clip: text;
@@ -263,10 +267,17 @@ body {
 }
 
 .text-gradient-hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* Using direct hex codes to ensure visibility */
+  background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%); 
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.dark .text-gradient-hero {
+  /* Lighter gradient for dark mode */
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%); 
 }
 
 /* Skeleton Loading */

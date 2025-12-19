@@ -53,7 +53,7 @@ export default function Home() {
             {/* Main Heading */}
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-8 animate-fadeInUp text-gray-900 dark:text-white">
               Master Your <br className="hidden sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-400 hover-lift inline-block cursor-default pb-2">Internship Journey</span>
+              <span className="text-gradient-hero hover-lift inline-block cursor-default pb-2">Internship Journey</span>
             </h1>
 
             {/* Subtitle */}
