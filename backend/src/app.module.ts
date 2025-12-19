@@ -6,6 +6,9 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { CertificatesModule } from './certificates/certificates.module';
+import { CoursesModule } from './courses/courses.module';
+import { ProgressModule } from './progress/progress.module';
+import { UsersModule } from './users/users.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
@@ -17,6 +20,9 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     PrismaModule,
     AuthModule,
     CertificatesModule,
+    CoursesModule,
+    ProgressModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [

@@ -5,10 +5,10 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-6">
-          Full-Stack TDD Application
+          Internship Learning Management System
         </h1>
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Next.js + NestJS with JWT Authentication, Role-Based Access Control, and PDF Certificate Generation
+          A comprehensive LMS with role-based access, sequential chapter progression, and automated certificate generation
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -28,26 +28,26 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="text-3xl mb-3">🔐</div>
-            <h3 className="text-lg font-semibold mb-2">JWT Authentication</h3>
+            <div className="text-3xl mb-3">📚</div>
+            <h3 className="text-lg font-semibold mb-2">Sequential Learning</h3>
             <p className="text-gray-600 text-sm">
-              Secure authentication with JWT tokens and role-based access control
+              Chapter-by-chapter progression with locked content until prerequisites complete
             </p>
           </div>
           
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="text-3xl mb-3">👥</div>
-            <h3 className="text-lg font-semibold mb-2">RBAC System</h3>
+            <h3 className="text-lg font-semibold mb-2">Role-Based Access</h3>
             <p className="text-gray-600 text-sm">
-              Three roles: Student, Mentor, and Admin with different permissions
+              Students learn, Mentors teach, and Admins manage the platform
             </p>
           </div>
           
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="text-3xl mb-3">📄</div>
-            <h3 className="text-lg font-semibold mb-2">PDF Certificates</h3>
+            <div className="text-3xl mb-3">🎓</div>
+            <h3 className="text-lg font-semibold mb-2">Certificates</h3>
             <p className="text-gray-600 text-sm">
-              Dynamic PDF certificate generation with PDFKit
+              Earn certificates upon 100% course completion with PDF download
             </p>
           </div>
         </div>

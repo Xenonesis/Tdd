@@ -24,47 +24,98 @@ model User {
   firstName String
   lastName  String
   role      Role     @default(STUDENT)
-  isActive  Boolean  @default(true)
+  isActive  Boolean  @default(true) // For mentor approval workflow
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  certificates Certificate[]
-  mentorSessions Session[] @relation("MentorSessions")
-  studentSessions Session[] @relation("StudentSessions")
+  createdCourses    Course[]          @relation("MentorCourses")
+  courseAssignments CourseAssignment[]
+  progress          Progress[]
+  certificates      Certificate[]
 
   @@map("users")
 }
 
-// Certificate model for PDF generation
-model Certificate {
+// Course model
+model Course {
   id          String   @id @default(uuid())
-  userId      String
   title       String
-  description String?
-  issuedAt    DateTime @default(now())
-  pdfUrl      String?  // URL to stored PDF
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("certificates")
-}
-
-// Session model for mentor-student sessions
-model Session {
-  id          String   @id @default(uuid())
+  description String
   mentorId    String
-  studentId   String
-  title       String
-  description String?
-  scheduledAt DateTime
-  duration    Int      // Duration in minutes
-  status      String   @default("scheduled") // scheduled, completed, cancelled
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  mentor  User @relation("MentorSessions", fields: [mentorId], references: [id], onDelete: Cascade)
-  student User @relation("StudentSessions", fields: [studentId], references: [id], onDelete: Cascade)
+  // Relations
+  mentor      User               @relation("MentorCourses", fields: [mentorId], references: [id], onDelete: Cascade)
+  chapters    Chapter[]
+  assignments CourseAssignment[]
+  certificates Certificate[]
 
-  @@map("sessions")
+  @@map("courses")
+}
+
+// Chapter model
+model Chapter {
+  id            String   @id @default(uuid())
+  courseId      String
+  title         String
+  description   String
+  imageUrl      String?
+  videoUrl      String?
+  sequenceOrder Int
+  createdAt     DateTime @default(now())
+
+  // Relations
+  course   Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progress Progress[]
+
+  @@unique([courseId, sequenceOrder])
+  @@map("chapters")
+}
+
+// Course Assignment model
+model CourseAssignment {
+  id         String   @id @default(uuid())
+  courseId   String
+  studentId  String
+  assignedAt DateTime @default(now())
+
+  // Relations
+  course  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, studentId])
+  @@map("course_assignments")
+}
+
+// Progress model
+model Progress {
+  id          String   @id @default(uuid())
+  studentId   String
+  chapterId   String
+  completedAt DateTime @default(now())
+
+  // Relations
+  student User    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, chapterId])
+  @@map("progress")
+}
+
+// Certificate model for course completion
+model Certificate {
+  id       String   @id @default(uuid())
+  studentId String
+  courseId String
+  pdfUrl   String?
+  issuedAt DateTime @default(now())
+
+  // Relations
+  student User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId])
+  @@map("certificates")
 }

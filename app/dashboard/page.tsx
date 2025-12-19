@@ -2,74 +2,89 @@
 
 import { useAuth } from '@/lib/auth/AuthContext';
 import ProtectedRoute from '@/lib/auth/ProtectedRoute';
+import Navbar from '@/components/Navbar';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 function DashboardContent() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to role-specific dashboard
+    if (user?.role === 'STUDENT') {
+      router.push('/courses');
+    } else if (user?.role === 'MENTOR') {
+      router.push('/mentor/courses');
+    } else if (user?.role === 'ADMIN') {
+      router.push('/admin/analytics');
+    }
+  }, [user, router]);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold">Dashboard</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-700">
-                {user?.firstName} {user?.lastName} ({user?.role})
-              </span>
-              <button
-                onClick={logout}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+      <Navbar />
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="bg-white rounded-lg shadow p-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Welcome, {user?.firstName}!
             </h2>
-            <div className="space-y-4">
-              <div className="border-l-4 border-blue-500 pl-4">
-                <p className="text-sm text-gray-600">Email</p>
-                <p className="text-lg font-medium">{user?.email}</p>
-              </div>
-              <div className="border-l-4 border-blue-500 pl-4">
-                <p className="text-sm text-gray-600">Role</p>
-                <p className="text-lg font-medium">{user?.role}</p>
-              </div>
-            </div>
+            <p className="text-gray-600 mb-8">You are logged in as a {user?.role}.</p>
 
             {user?.role === 'ADMIN' && (
-              <div className="mt-6 p-4 bg-blue-50 rounded-md">
-                <h3 className="font-semibold text-blue-900">Admin Panel</h3>
-                <p className="text-sm text-blue-700">
-                  You have full access to all features including certificate generation.
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Link href="/admin/users" className="p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                  <div className="text-4xl mb-3">👥</div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">User Management</h3>
+                  <p className="text-gray-600 text-sm">Manage users and approve mentors</p>
+                </Link>
+                <Link href="/admin/courses" className="p-6 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                  <div className="text-4xl mb-3">📚</div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">All Courses</h3>
+                  <p className="text-gray-600 text-sm">View all courses in the system</p>
+                </Link>
+                <Link href="/admin/analytics" className="p-6 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                  <div className="text-4xl mb-3">📊</div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Analytics</h3>
+                  <p className="text-gray-600 text-sm">View platform statistics</p>
+                </Link>
               </div>
             )}
 
             {user?.role === 'MENTOR' && (
-              <div className="mt-6 p-4 bg-green-50 rounded-md">
-                <h3 className="font-semibold text-green-900">Mentor Panel</h3>
-                <p className="text-sm text-green-700">
-                  You can generate certificates for students.
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Link href="/mentor/courses" className="p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                  <div className="text-4xl mb-3">📚</div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">My Courses</h3>
+                  <p className="text-gray-600 text-sm">Create and manage your courses</p>
+                </Link>
+                <Link href="/mentor/students" className="p-6 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                  <div className="text-4xl mb-3">👥</div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Students</h3>
+                  <p className="text-gray-600 text-sm">Track student progress</p>
+                </Link>
               </div>
             )}
 
             {user?.role === 'STUDENT' && (
-              <div className="mt-6 p-4 bg-purple-50 rounded-md">
-                <h3 className="font-semibold text-purple-900">Student Panel</h3>
-                <p className="text-sm text-purple-700">
-                  View your certificates and learning progress here.
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Link href="/courses" className="p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                  <div className="text-4xl mb-3">📚</div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">My Courses</h3>
+                  <p className="text-gray-600 text-sm">Access your assigned courses</p>
+                </Link>
+                <Link href="/progress" className="p-6 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                  <div className="text-4xl mb-3">📊</div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Progress</h3>
+                  <p className="text-gray-600 text-sm">Track your learning progress</p>
+                </Link>
+                <Link href="/certificates" className="p-6 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                  <div className="text-4xl mb-3">🎓</div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Certificates</h3>
+                  <p className="text-gray-600 text-sm">Download your certificates</p>
+                </Link>
               </div>
             )}
           </div>

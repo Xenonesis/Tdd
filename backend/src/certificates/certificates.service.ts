@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import PDFDocument from 'pdfkit';
 import * as fs from 'fs';
@@ -8,31 +8,94 @@ import * as path from 'path';
 export class CertificatesService {
   constructor(private prisma: PrismaService) {}
 
-  async generateCertificate(userId: string, title: string, description?: string) {
+  async generateCertificate(studentId: string, courseId: string) {
     const user = await this.prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: studentId },
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('Student not found');
+    }
+
+    const course = await this.prisma.course.findUnique({
+      where: { id: courseId },
+      include: {
+        chapters: true,
+      },
+    });
+
+    if (!course) {
+      throw new NotFoundException('Course not found');
+    }
+
+    // Verify student is assigned to this course
+    const assignment = await this.prisma.courseAssignment.findUnique({
+      where: {
+        courseId_studentId: {
+          courseId,
+          studentId,
+        },
+      },
+    });
+
+    if (!assignment) {
+      throw new NotFoundException('Student is not assigned to this course');
+    }
+
+    // Check if course is 100% complete
+    const progress = await this.prisma.progress.findMany({
+      where: {
+        studentId,
+        chapter: {
+          courseId,
+        },
+      },
+    });
+
+    if (progress.length !== course.chapters.length) {
+      throw new BadRequestException('Course must be 100% complete to generate certificate');
+    }
+
+    // Check if certificate already exists
+    const existingCertificate = await this.prisma.certificate.findUnique({
+      where: {
+        studentId_courseId: {
+          studentId,
+          courseId,
+        },
+      },
+    });
+
+    if (existingCertificate) {
+      return existingCertificate;
     }
 
     // Create certificate record
     const certificate = await this.prisma.certificate.create({
       data: {
-        userId,
-        title,
-        description,
+        studentId,
+        courseId,
       },
     });
 
     // Generate PDF
-    const pdfPath = await this.createPDF(certificate.id, user, title, description);
+    const pdfPath = await this.createPDF(certificate.id, user, course);
 
     // Update certificate with PDF URL
     const updatedCertificate = await this.prisma.certificate.update({
       where: { id: certificate.id },
       data: { pdfUrl: pdfPath },
+      include: {
+        course: true,
+        student: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+      },
     });
 
     return updatedCertificate;
@@ -41,8 +104,7 @@ export class CertificatesService {
   private async createPDF(
     certificateId: string,
     user: any,
-    title: string,
-    description?: string,
+    course: any,
   ): Promise<string> {
     const uploadsDir = path.join(process.cwd(), 'uploads', 'certificates');
     
@@ -100,16 +162,16 @@ export class CertificatesService {
         .fontSize(25)
         .font('Helvetica-Bold')
         .fillColor('#1e3a8a')
-        .text(title, 100, 360, {
+        .text(course.title, 100, 360, {
           align: 'center',
         });
 
-      if (description) {
+      if (course.description) {
         doc
           .fontSize(14)
           .font('Helvetica')
           .fillColor('#666')
-          .text(description, 100, 420, {
+          .text(course.description, 100, 420, {
             align: 'center',
             width: 600,
           });
@@ -138,9 +200,18 @@ export class CertificatesService {
     });
   }
 
-  async getCertificatesByUser(userId: string) {
+  async getCertificatesByUser(studentId: string) {
     return this.prisma.certificate.findMany({
-      where: { userId },
+      where: { studentId },
+      include: {
+        course: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+          },
+        },
+      },
       orderBy: { issuedAt: 'desc' },
     });
   }
@@ -148,7 +219,23 @@ export class CertificatesService {
   async getCertificateById(certificateId: string) {
     const certificate = await this.prisma.certificate.findUnique({
       where: { id: certificateId },
-      include: { user: true },
+      include: { 
+        student: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+        course: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+          },
+        },
+      },
     });
 
     if (!certificate) {

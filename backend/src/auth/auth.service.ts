@@ -23,6 +23,9 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
 
+    // Mentors need approval, so they start as inactive
+    const isActive = registerDto.role === 'MENTOR' ? false : true;
+
     const user = await this.prisma.user.create({
       data: {
         email: registerDto.email,
@@ -30,6 +33,7 @@ export class AuthService {
         firstName: registerDto.firstName,
         lastName: registerDto.lastName,
         role: registerDto.role || 'STUDENT',
+        isActive,
       },
       select: {
         id: true,
@@ -37,6 +41,7 @@ export class AuthService {
         firstName: true,
         lastName: true,
         role: true,
+        isActive: true,
         createdAt: true,
       },
     });
@@ -46,6 +51,9 @@ export class AuthService {
     return {
       user,
       accessToken: token,
+      message: registerDto.role === 'MENTOR' 
+        ? 'Mentor account created. Waiting for admin approval.' 
+        : 'Account created successfully.',
     };
   }
 

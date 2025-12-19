@@ -6,32 +6,34 @@ import { useEffect } from 'react';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  roles?: string[];
+  allowedRoles?: string[];
 }
 
-export default function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
-  const { user, loading, hasRole } = useAuth();
+export default function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        router.push('/login');
-      } else if (roles && !hasRole(roles)) {
-        router.push('/unauthorized');
-      }
+    if (!loading && !user) {
+      router.push('/login');
+    } else if (!loading && user && allowedRoles && !allowedRoles.includes(user.role)) {
+      router.push('/dashboard');
     }
-  }, [user, loading, roles, hasRole, router]);
+  }, [user, loading, router, allowedRoles]);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
       </div>
     );
   }
 
-  if (!user || (roles && !hasRole(roles))) {
+  if (!user) {
+    return null;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
     return null;
   }
 
