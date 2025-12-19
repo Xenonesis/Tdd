@@ -6,6 +6,11 @@ import { useAuth } from '@/lib/auth/AuthContext';
 import ProtectedRoute from '@/lib/auth/ProtectedRoute';
 import Navbar from '@/components/Navbar';
 import axios from '@/lib/axios';
+import { Button } from '@/components/ui/Button';
+import { ProgressBar, CircularProgress } from '@/components/ui/ProgressBar';
+import { LoadingScreen } from '@/components/ui/Loading';
+import { Alert } from '@/components/ui/Alert';
+import { Badge } from '@/components/ui/Badge';
 
 export default function CourseViewerPage() {
   return (
@@ -24,6 +29,8 @@ function CourseViewerContent() {
   const [progress, setProgress] = useState<any>(null);
   const [selectedChapter, setSelectedChapter] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [completing, setCompleting] = useState(false);
+  const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
     fetchCourseData();
@@ -41,11 +48,10 @@ function CourseViewerContent() {
       setChapters(chaptersRes.data);
       setProgress(progressRes.data);
 
-      // Select first unlocked chapter
-      const firstUnlocked = chaptersRes.data.find((ch: any) => !ch.isLocked);
-      if (firstUnlocked) {
-        setSelectedChapter(firstUnlocked);
-      }
+      // Select first unlocked or first completed chapter
+      const firstUnlocked = chaptersRes.data.find((ch: any) => !ch.isLocked && !ch.isCompleted);
+      const firstChapter = chaptersRes.data[0];
+      setSelectedChapter(firstUnlocked || firstChapter);
     } catch (error) {
       console.error('Error fetching course data:', error);
     } finally {
@@ -54,181 +60,270 @@ function CourseViewerContent() {
   };
 
   const completeChapter = async (chapterId: string) => {
+    setCompleting(true);
     try {
       await axios.post(`/api/progress/${chapterId}/complete`);
-      await fetchCourseData(); // Refresh data
-      alert('Chapter completed! ✓');
+      await fetchCourseData();
     } catch (error: any) {
       alert(error.response?.data?.message || 'Error completing chapter');
+    } finally {
+      setCompleting(false);
     }
   };
 
   const generateCertificate = async () => {
+    setGenerating(true);
     try {
-      const response = await axios.post(`/api/certificates/course/${params.courseId}`);
-      alert('Certificate generated! You can download it from the Certificates page.');
+      await axios.post(`/api/certificates/course/${params.courseId}`);
       router.push('/certificates');
     } catch (error: any) {
       alert(error.response?.data?.message || 'Error generating certificate');
+    } finally {
+      setGenerating(false);
     }
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="flex items-center justify-center h-96">
-          <div className="text-gray-600">Loading...</div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen text="Loading course..." />;
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="mb-6">
-            <button
-              onClick={() => router.push('/courses')}
-              className="text-blue-600 hover:text-blue-800 mb-4"
-            >
-              ← Back to Courses
-            </button>
-            <h1 className="text-3xl font-bold text-gray-900">{course?.title}</h1>
-            <p className="text-gray-600 mt-2">{course?.description}</p>
-          </div>
+  const currentIndex = selectedChapter ? chapters.findIndex(c => c.id === selectedChapter.id) : 0;
 
-          {progress && (
-            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-gray-900">Your Progress</h2>
-                <span className="text-2xl font-bold text-blue-600">
-                  {progress.completionPercentage}%
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-4 mb-4">
-                <div
-                  className="bg-blue-600 h-4 rounded-full transition-all"
-                  style={{ width: `${progress.completionPercentage}%` }}
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <Navbar />
+      
+      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        {/* Back Button & Title */}
+        <div className="mb-6">
+          <button
+            onClick={() => router.push('/courses')}
+            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-4 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span>Back to Courses</span>
+          </button>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
+                {course?.title}
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-1">{course?.description}</p>
+            </div>
+            {/* Circular Progress */}
+            {progress && (
+              <div className="flex-shrink-0">
+                <CircularProgress 
+                  value={progress.completionPercentage} 
+                  size={80}
+                  variant={progress.isComplete ? 'success' : 'primary'}
                 />
               </div>
-              <p className="text-gray-600">
-                {progress.completedChapters} of {progress.totalChapters} chapters completed
-              </p>
-              {progress.isComplete && (
-                <button
-                  onClick={generateCertificate}
-                  className="mt-4 px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 font-semibold"
-                >
-                  🎓 Generate Certificate
-                </button>
-              )}
-            </div>
-          )}
+            )}
+          </div>
+        </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Chapter List */}
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Chapters</h2>
-                <div className="space-y-2">
-                  {chapters.map((chapter, index) => (
-                    <button
-                      key={chapter.id}
-                      onClick={() => !chapter.isLocked && setSelectedChapter(chapter)}
-                      disabled={chapter.isLocked}
-                      className={`w-full text-left p-3 rounded-lg transition-colors ${
-                        chapter.isLocked
-                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                          : selectedChapter?.id === chapter.id
-                          ? 'bg-blue-100 border-2 border-blue-600'
-                          : 'bg-gray-50 hover:bg-gray-100'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-gray-500 font-medium">
-                            {index + 1}.
-                          </span>
-                          <span className={`font-medium ${chapter.isLocked ? 'text-gray-400' : 'text-gray-900'}`}>
-                            {chapter.title}
-                          </span>
-                        </div>
-                        <div>
-                          {chapter.isCompleted && <span className="text-green-600">✓</span>}
-                          {chapter.isLocked && <span>🔒</span>}
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
+        {/* Course Completion Banner */}
+        {progress?.isComplete && (
+          <div className="mb-6">
+            <Alert variant="success" title="🎉 Congratulations! Course Completed!">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <span>You've completed all chapters. You can now generate your certificate.</span>
+                <Button
+                  onClick={generateCertificate}
+                  loading={generating}
+                  variant="secondary"
+                  size="sm"
+                  icon={<span>🎓</span>}
+                >
+                  Generate Certificate
+                </Button>
+              </div>
+            </Alert>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Chapter List (Sidebar) */}
+          <div className="lg:col-span-1 order-2 lg:order-1">
+            <div className="card p-6 sticky top-24">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <span>📖</span>
+                Chapters
+                <Badge variant="gray" size="sm">{chapters.length}</Badge>
+              </h2>
+              <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-2">
+                {chapters.map((chapter, index) => (
+                  <button
+                    key={chapter.id}
+                    onClick={() => !chapter.isLocked && setSelectedChapter(chapter)}
+                    disabled={chapter.isLocked}
+                    className={`w-full text-left p-3 rounded-xl transition-all flex items-center gap-3 ${
+                      chapter.isLocked
+                        ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
+                        : selectedChapter?.id === chapter.id
+                        ? 'bg-indigo-100 dark:bg-indigo-900/30 ring-2 ring-indigo-500'
+                        : 'bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    {/* Chapter Number/Status */}
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-semibold flex-shrink-0 ${
+                      chapter.isCompleted 
+                        ? 'bg-emerald-500 text-white' 
+                        : chapter.isLocked
+                        ? 'bg-gray-200 dark:bg-gray-700 text-gray-400'
+                        : 'bg-indigo-500 text-white'
+                    }`}>
+                      {chapter.isCompleted ? (
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      ) : chapter.isLocked ? (
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        index + 1
+                      )}
+                    </div>
+                    {/* Chapter Title */}
+                    <div className="flex-1 min-w-0">
+                      <p className={`font-medium truncate ${
+                        chapter.isLocked ? 'text-gray-400' : 'text-gray-900 dark:text-white'
+                      }`}>
+                        {chapter.title}
+                      </p>
+                      {chapter.isLocked && (
+                        <p className="text-xs text-gray-400">Complete previous</p>
+                      )}
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
+          </div>
 
-            {/* Chapter Content */}
-            <div className="lg:col-span-2">
-              {selectedChapter ? (
-                <div className="bg-white rounded-lg shadow-md p-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    {selectedChapter.title}
-                  </h2>
-                  <p className="text-gray-700 mb-6 whitespace-pre-wrap">
+          {/* Chapter Content (Main) */}
+          <div className="lg:col-span-2 order-1 lg:order-2">
+            {selectedChapter ? (
+              <div className="card p-6 lg:p-8">
+                {/* Chapter Header */}
+                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  <span>Chapter {currentIndex + 1} of {chapters.length}</span>
+                  {selectedChapter.isCompleted && (
+                    <Badge variant="success" size="sm" icon={<span>✓</span>}>Completed</Badge>
+                  )}
+                </div>
+                
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                  {selectedChapter.title}
+                </h2>
+
+                {/* Content */}
+                <div className="prose prose-gray dark:prose-invert max-w-none mb-8">
+                  <p className="whitespace-pre-wrap text-gray-700 dark:text-gray-300 leading-relaxed">
                     {selectedChapter.description}
                   </p>
 
+                  {/* Image */}
                   {selectedChapter.imageUrl && (
-                    <div className="mb-6">
+                    <div className="my-6 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
                       <img
                         src={selectedChapter.imageUrl}
                         alt={selectedChapter.title}
-                        className="w-full rounded-lg"
+                        className="w-full"
                       />
                     </div>
                   )}
 
+                  {/* Video Link */}
                   {selectedChapter.videoUrl && (
-                    <div className="mb-6">
-                      <h3 className="font-semibold text-gray-900 mb-2">Video</h3>
-                      <a
-                        href={selectedChapter.videoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 underline"
-                      >
-                        Watch Video →
-                      </a>
+                    <div className="my-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                          <span className="text-2xl">🎥</span>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">Video Content</p>
+                          <a
+                            href={selectedChapter.videoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-indigo-600 dark:text-indigo-400 hover:underline text-sm"
+                          >
+                            Watch Video →
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   )}
+                </div>
 
-                  {!selectedChapter.isCompleted && (
-                    <button
+                {/* Actions */}
+                <div className="flex items-center gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+                  {!selectedChapter.isCompleted ? (
+                    <Button
                       onClick={() => completeChapter(selectedChapter.id)}
-                      className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
+                      loading={completing}
+                      size="lg"
+                      icon={<span>✓</span>}
                     >
                       Mark as Complete
-                    </button>
-                  )}
-
-                  {selectedChapter.isCompleted && (
-                    <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                      <span className="text-green-700 font-semibold">✓ Chapter Completed</span>
+                    </Button>
+                  ) : (
+                    <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="font-semibold">Chapter Completed</span>
                     </div>
                   )}
+
+                  {/* Navigation */}
+                  <div className="flex-1 flex justify-end gap-2">
+                    {currentIndex > 0 && (
+                      <Button
+                        variant="ghost"
+                        onClick={() => setSelectedChapter(chapters[currentIndex - 1])}
+                        icon={
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        }
+                      >
+                        Previous
+                      </Button>
+                    )}
+                    {currentIndex < chapters.length - 1 && !chapters[currentIndex + 1]?.isLocked && (
+                      <Button
+                        variant="outline"
+                        onClick={() => setSelectedChapter(chapters[currentIndex + 1])}
+                        iconPosition="right"
+                        icon={
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        }
+                      >
+                        Next
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              ) : (
-                <div className="bg-white rounded-lg shadow-md p-12 text-center">
-                  <div className="text-6xl mb-4">📖</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    Select a Chapter
-                  </h3>
-                  <p className="text-gray-600">
-                    Choose a chapter from the list to start learning.
-                  </p>
-                </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="card p-12 text-center">
+                <div className="text-6xl mb-4">📖</div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                  Select a Chapter
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Choose a chapter from the list to start learning.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </main>

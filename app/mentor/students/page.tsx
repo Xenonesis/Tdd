@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import ProtectedRoute from '@/lib/auth/ProtectedRoute';
 import Navbar from '@/components/Navbar';
 import axios from '@/lib/axios';
+import { ProgressBar } from '@/components/ui/ProgressBar';
+import { Badge } from '@/components/ui/Badge';
+import { LoadingList } from '@/components/ui/Loading';
 
 export default function MentorStudentsPage() {
   return (
@@ -32,17 +35,6 @@ function MentorStudentsContent() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="flex items-center justify-center h-96">
-          <div className="text-gray-600">Loading...</div>
-        </div>
-      </div>
-    );
-  }
-
   // Group by student
   const studentMap = new Map();
   studentsProgress.forEach((progress) => {
@@ -56,79 +48,148 @@ function MentorStudentsContent() {
   });
 
   const students = Array.from(studentMap.values());
+  const totalCompleted = studentsProgress.filter(p => p.isComplete).length;
+  const averageProgress = studentsProgress.length > 0 
+    ? Math.round(studentsProgress.reduce((acc, p) => acc + p.completionPercentage, 0) / studentsProgress.length) 
+    : 0;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <Navbar />
+        <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <div className="skeleton h-9 w-48 mb-3" />
+            <div className="skeleton h-5 w-64" />
+          </div>
+          <LoadingList count={3} />
+        </main>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navbar />
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">Student Progress</h1>
-            <p className="text-gray-600 mt-2">
-              Track your students' learning progress
+      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Student Progress
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Track your students' learning progress across all courses
+          </p>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          <div className="card p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
+              <span className="text-2xl">👥</span>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{students.length}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Students</p>
+            </div>
+          </div>
+          <div className="card p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+              <span className="text-2xl">✓</span>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalCompleted}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Completed</p>
+            </div>
+          </div>
+          <div className="card p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+              <span className="text-2xl">📊</span>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{averageProgress}%</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Avg Progress</p>
+            </div>
+          </div>
+        </div>
+
+        {students.length === 0 ? (
+          /* Empty State */
+          <div className="card p-12 text-center">
+            <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-6">
+              <span className="text-5xl">👥</span>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+              No Students Yet
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
+              Assign students to your courses to see their progress here. 
+              Go to a course and click "Assign Students" to get started.
             </p>
           </div>
-
-          {students.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-md p-12 text-center">
-              <div className="text-6xl mb-4">👥</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">No Students Yet</h3>
-              <p className="text-gray-600">
-                Assign students to your courses to see their progress here.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {students.map(({ student, courses }) => (
-                <div key={student.id} className="bg-white rounded-lg shadow-md p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h2 className="text-xl font-bold text-gray-900">
-                        {student.firstName} {student.lastName}
-                      </h2>
-                      <p className="text-sm text-gray-600">{student.email}</p>
+        ) : (
+          /* Students List */
+          <div className="space-y-6">
+            {students.map(({ student, courses }, index) => (
+              <div 
+                key={student.id} 
+                className="card overflow-hidden animate-fadeInUp"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {/* Student Header */}
+                <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center text-white font-bold text-lg">
+                        {student.firstName[0]}{student.lastName[0]}
+                      </div>
+                      <div>
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                          {student.firstName} {student.lastName}
+                        </h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{student.email}</p>
+                      </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-600">Enrolled Courses</p>
-                      <p className="text-2xl font-bold text-blue-600">{courses.length}</p>
+                      <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{courses.length}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Courses</p>
                     </div>
                   </div>
+                </div>
 
-                  <div className="space-y-3">
-                    {courses.map((courseProgress: any) => (
-                      <div key={courseProgress.courseId} className="border rounded-lg p-4">
-                        <div className="flex justify-between items-center mb-2">
-                          <h3 className="font-semibold text-gray-900">
-                            {courseProgress.courseTitle}
-                          </h3>
-                          <span className="text-lg font-bold text-blue-600">
+                {/* Course Progress */}
+                <div className="p-6 space-y-4">
+                  {courses.map((courseProgress: any) => (
+                    <div key={courseProgress.courseId} className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                          {courseProgress.courseTitle}
+                        </h3>
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
                             {courseProgress.completionPercentage}%
                           </span>
+                          {courseProgress.isComplete && (
+                            <Badge variant="success" size="sm" icon={<span>✓</span>}>Done</Badge>
+                          )}
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                          <div
-                            className={`h-2 rounded-full transition-all ${
-                              courseProgress.isComplete ? 'bg-green-600' : 'bg-blue-600'
-                            }`}
-                            style={{ width: `${courseProgress.completionPercentage}%` }}
-                          />
-                        </div>
-                        <p className="text-sm text-gray-600">
-                          {courseProgress.completedChapters} / {courseProgress.totalChapters} chapters completed
-                        </p>
-                        {courseProgress.isComplete && (
-                          <span className="inline-block mt-2 text-xs font-semibold text-green-700 bg-green-100 px-2 py-1 rounded">
-                            ✓ Completed
-                          </span>
-                        )}
                       </div>
-                    ))}
-                  </div>
+                      <ProgressBar 
+                        value={courseProgress.completionPercentage} 
+                        showLabel={false}
+                        variant={courseProgress.isComplete ? 'success' : 'primary'}
+                        size="sm"
+                      />
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                        {courseProgress.completedChapters} / {courseProgress.totalChapters} chapters completed
+                      </p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

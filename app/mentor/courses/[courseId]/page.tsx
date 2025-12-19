@@ -2,10 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useAuth } from '@/lib/auth/AuthContext';
 import ProtectedRoute from '@/lib/auth/ProtectedRoute';
 import Navbar from '@/components/Navbar';
 import axios from '@/lib/axios';
+import { Button } from '@/components/ui/Button';
+import { Modal } from '@/components/ui/Modal';
+import { Input, Textarea } from '@/components/ui/Input';
+import { Badge } from '@/components/ui/Badge';
+import { LoadingScreen } from '@/components/ui/Loading';
+import { Alert } from '@/components/ui/Alert';
 
 export default function MentorCourseDetailPage() {
   return (
@@ -23,31 +28,37 @@ function MentorCourseDetailContent() {
   const [students, setStudents] = useState<any[]>([]);
   const [availableStudents, setAvailableStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showChapterModal, setShowChapterModal] = useState(false);
-  const [showAssignModal, setShowAssignModal] = useState(false);
-  const [newChapter, setNewChapter] = useState({
-    title: '',
-    description: '',
-    imageUrl: '',
-    videoUrl: '',
-  });
-  const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
+  
+  // Modals
+  const [showAddChapterModal, setShowAddChapterModal] = useState(false);
+  const [showAssignStudentModal, setShowAssignStudentModal] = useState(false);
+  
+  // Form States
+  const [newChapter, setNewChapter] = useState({ title: '', description: '', imageUrl: '', videoUrl: '' });
+  const [selectedStudentId, setSelectedStudentId] = useState('');
+  const [creating, setCreating] = useState(false);
+  const [assigning, setAssigning] = useState(false);
 
   useEffect(() => {
     fetchCourseData();
-    fetchAvailableStudents();
   }, [params.courseId]);
 
   const fetchCourseData = async () => {
     try {
-      const [courseRes, chaptersRes] = await Promise.all([
+      const [courseRes, chaptersRes, studentsRes, allStudentsRes] = await Promise.all([
         axios.get(`/api/courses/${params.courseId}`),
         axios.get(`/api/courses/${params.courseId}/chapters`),
+        axios.get(`/api/courses/${params.courseId}/students`),
+        axios.get('/api/users?role=STUDENT'),
       ]);
 
       setCourse(courseRes.data);
       setChapters(chaptersRes.data);
-      setStudents(courseRes.data.assignments?.map((a: any) => a.student) || []);
+      setStudents(studentsRes.data);
+      
+      // Filter out already assigned students
+      const assignedIds = new Set(studentsRes.data.map((s: any) => s.id));
+      setAvailableStudents(allStudentsRes.data.filter((s: any) => !assignedIds.has(s.id)));
     } catch (error) {
       console.error('Error fetching course data:', error);
     } finally {
@@ -55,286 +66,375 @@ function MentorCourseDetailContent() {
     }
   };
 
-  const fetchAvailableStudents = async () => {
-    try {
-      const response = await axios.get('/api/users/students');
-      setAvailableStudents(response.data);
-    } catch (error) {
-      console.error('Error fetching students:', error);
-    }
-  };
-
   const addChapter = async (e: React.FormEvent) => {
     e.preventDefault();
+    setCreating(true);
     try {
-      await axios.post(`/api/courses/${params.courseId}/chapters`, newChapter);
-      setShowChapterModal(false);
+      await axios.post(`/api/courses/${params.courseId}/chapters`, {
+        ...newChapter,
+        order: chapters.length + 1,
+      });
+      setShowAddChapterModal(false);
       setNewChapter({ title: '', description: '', imageUrl: '', videoUrl: '' });
       fetchCourseData();
-      alert('Chapter added successfully!');
     } catch (error: any) {
       alert(error.response?.data?.message || 'Error adding chapter');
+    } finally {
+      setCreating(false);
     }
   };
 
-  const assignStudents = async () => {
+  const assignStudent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedStudentId) return;
+    
+    setAssigning(true);
     try {
       await axios.post(`/api/courses/${params.courseId}/assign`, {
-        studentIds: selectedStudents,
+        studentId: selectedStudentId,
       });
-      setShowAssignModal(false);
-      setSelectedStudents([]);
+      setShowAssignStudentModal(false);
+      setSelectedStudentId('');
       fetchCourseData();
-      alert('Students assigned successfully!');
     } catch (error: any) {
-      alert(error.response?.data?.message || 'Error assigning students');
+      alert(error.response?.data?.message || 'Error assigning student');
+    } finally {
+      setAssigning(false);
+    }
+  };
+
+  const removeStudent = async (studentId: string) => {
+    if (!confirm('Are you sure you want to remove this student from the course?')) return;
+    
+    try {
+      await axios.delete(`/api/courses/${params.courseId}/students/${studentId}`);
+      fetchCourseData();
+    } catch (error: any) {
+      alert(error.response?.data?.message || 'Error removing student');
     }
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="flex items-center justify-center h-96">
-          <div className="text-gray-600">Loading...</div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen text="Loading course..." />;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navbar />
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <button
-            onClick={() => router.push('/mentor/courses')}
-            className="text-blue-600 hover:text-blue-800 mb-4"
-          >
-            ← Back to Courses
-          </button>
+      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        {/* Back Button */}
+        <button
+          onClick={() => router.push('/mentor/courses')}
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          <span>Back to Courses</span>
+        </button>
 
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{course?.title}</h1>
-            <p className="text-gray-600 mb-4">{course?.description}</p>
-            <div className="flex space-x-4 text-sm text-gray-600">
-              <span>📚 {chapters.length} chapters</span>
-              <span>👥 {students.length} students</span>
+        {/* Course Header */}
+        <div className="card p-6 mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center flex-shrink-0">
+                <span className="text-3xl">📚</span>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{course?.title}</h1>
+                <p className="text-gray-600 dark:text-gray-400 mt-1">{course?.description}</p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <Badge variant="primary" size="sm">{chapters.length} Chapters</Badge>
+              <Badge variant="secondary" size="sm">{students.length} Students</Badge>
             </div>
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Chapters Section */}
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-gray-900">Chapters</h2>
-                <button
-                  onClick={() => setShowChapterModal(true)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
-                >
-                  + Add Chapter
-                </button>
-              </div>
-
-              {chapters.length === 0 ? (
-                <div className="bg-white rounded-lg shadow-md p-8 text-center">
-                  <div className="text-4xl mb-3">📖</div>
-                  <p className="text-gray-600 mb-4">No chapters yet</p>
-                  <button
-                    onClick={() => setShowChapterModal(true)}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
-                  >
-                    Add First Chapter
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {chapters.map((chapter, index) => (
-                    <div key={chapter.id} className="bg-white rounded-lg shadow-md p-4">
-                      <div className="flex items-start">
-                        <span className="text-gray-500 font-semibold mr-3">{index + 1}.</span>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900">{chapter.title}</h3>
-                          <p className="text-sm text-gray-600 mt-1">{chapter.description}</p>
-                          <div className="flex items-center space-x-3 mt-2 text-xs text-gray-500">
-                            {chapter.imageUrl && <span>🖼️ Image</span>}
-                            {chapter.videoUrl && <span>🎥 Video</span>}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Chapters Section */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <span>📖</span> Chapters
+              </h2>
+              <Button
+                size="sm"
+                onClick={() => setShowAddChapterModal(true)}
+                icon={
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                }
+              >
+                Add Chapter
+              </Button>
             </div>
 
-            {/* Students Section */}
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-gray-900">Assigned Students</h2>
-                <button
-                  onClick={() => setShowAssignModal(true)}
-                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium"
-                >
-                  + Assign Students
-                </button>
-              </div>
-
-              {students.length === 0 ? (
-                <div className="bg-white rounded-lg shadow-md p-8 text-center">
-                  <div className="text-4xl mb-3">👥</div>
-                  <p className="text-gray-600 mb-4">No students assigned yet</p>
-                  <button
-                    onClick={() => setShowAssignModal(true)}
-                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium"
-                  >
-                    Assign Students
-                  </button>
+            {chapters.length === 0 ? (
+              <div className="card p-8 text-center">
+                <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-3xl">📖</span>
                 </div>
-              ) : (
-                <div className="bg-white rounded-lg shadow-md divide-y">
-                  {students.map((student) => (
-                    <div key={student.id} className="p-4">
-                      <p className="font-medium text-gray-900">
-                        {student.firstName} {student.lastName}
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">No Chapters Yet</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Add your first chapter to start building your course content.
+                </p>
+                <Button size="sm" onClick={() => setShowAddChapterModal(true)}>
+                  Add First Chapter
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {chapters.map((chapter, index) => (
+                  <div 
+                    key={chapter.id} 
+                    className="card p-4 flex items-center gap-4 animate-fadeIn"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold flex-shrink-0">
+                      {index + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+                        {chapter.title}
+                      </h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                        {chapter.description.substring(0, 60)}...
                       </p>
-                      <p className="text-sm text-gray-600">{student.email}</p>
                     </div>
-                  ))}
-                </div>
-              )}
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {chapter.imageUrl && (
+                        <span className="w-6 h-6 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs" title="Has image">
+                          🖼️
+                        </span>
+                      )}
+                      {chapter.videoUrl && (
+                        <span className="w-6 h-6 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs" title="Has video">
+                          🎥
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Students Section */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <span>👥</span> Enrolled Students
+              </h2>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => setShowAssignStudentModal(true)}
+                disabled={availableStudents.length === 0}
+                icon={
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                  </svg>
+                }
+              >
+                Assign Student
+              </Button>
             </div>
+
+            {availableStudents.length === 0 && students.length === 0 && (
+              <Alert variant="info" className="mb-4">
+                No students registered yet. Students need to register before they can be assigned to courses.
+              </Alert>
+            )}
+
+            {students.length === 0 ? (
+              <div className="card p-8 text-center">
+                <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-3xl">👥</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">No Students Yet</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Assign students to this course to let them start learning.
+                </p>
+                {availableStudents.length > 0 && (
+                  <Button size="sm" variant="secondary" onClick={() => setShowAssignStudentModal(true)}>
+                    Assign First Student
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {students.map((student, index) => (
+                  <div 
+                    key={student.id} 
+                    className="card p-4 flex items-center gap-4 animate-fadeIn"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <div className="w-10 h-10 rounded-lg gradient-secondary flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+                      {student.firstName[0]}{student.lastName[0]}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
+                        {student.firstName} {student.lastName}
+                      </h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                        {student.email}
+                      </p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 flex-shrink-0"
+                      onClick={() => removeStudent(student.id)}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </main>
 
       {/* Add Chapter Modal */}
-      {showChapterModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Add New Chapter</h2>
-            <form onSubmit={addChapter}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Chapter Title *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={newChapter.title}
-                  onChange={(e) => setNewChapter({ ...newChapter, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description *
-                </label>
-                <textarea
-                  required
-                  value={newChapter.description}
-                  onChange={(e) => setNewChapter({ ...newChapter, description: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  rows={4}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Image URL (optional)
-                </label>
-                <input
-                  type="url"
-                  value={newChapter.imageUrl}
-                  onChange={(e) => setNewChapter({ ...newChapter, imageUrl: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="https://example.com/image.jpg"
-                />
-              </div>
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Video URL (optional)
-                </label>
-                <input
-                  type="url"
-                  value={newChapter.videoUrl}
-                  onChange={(e) => setNewChapter({ ...newChapter, videoUrl: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="https://youtube.com/watch?v=..."
-                />
-              </div>
-              <div className="flex space-x-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowChapterModal(false);
-                    setNewChapter({ title: '', description: '', imageUrl: '', videoUrl: '' });
-                  }}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  Add Chapter
-                </button>
-              </div>
-            </form>
+      <Modal
+        isOpen={showAddChapterModal}
+        onClose={() => {
+          setShowAddChapterModal(false);
+          setNewChapter({ title: '', description: '', imageUrl: '', videoUrl: '' });
+        }}
+        title="Add New Chapter"
+        description="Create a new chapter for this course"
+        size="lg"
+      >
+        <form onSubmit={addChapter} className="space-y-5">
+          <Input
+            label="Chapter Title"
+            required
+            value={newChapter.title}
+            onChange={(e) => setNewChapter({ ...newChapter, title: e.target.value })}
+            placeholder="e.g., Introduction to React"
+          />
+          <Textarea
+            label="Description / Content"
+            required
+            value={newChapter.description}
+            onChange={(e) => setNewChapter({ ...newChapter, description: e.target.value })}
+            placeholder="Write the chapter content here..."
+            rows={6}
+          />
+          <Input
+            label="Image URL (optional)"
+            value={newChapter.imageUrl}
+            onChange={(e) => setNewChapter({ ...newChapter, imageUrl: e.target.value })}
+            placeholder="https://example.com/image.jpg"
+          />
+          <Input
+            label="Video URL (optional)"
+            value={newChapter.videoUrl}
+            onChange={(e) => setNewChapter({ ...newChapter, videoUrl: e.target.value })}
+            placeholder="https://youtube.com/watch?v=..."
+          />
+          <div className="flex gap-3 pt-4">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => {
+                setShowAddChapterModal(false);
+                setNewChapter({ title: '', description: '', imageUrl: '', videoUrl: '' });
+              }}
+              fullWidth
+            >
+              Cancel
+            </Button>
+            <Button type="submit" loading={creating} fullWidth>
+              Add Chapter
+            </Button>
           </div>
-        </div>
-      )}
+        </form>
+      </Modal>
 
-      {/* Assign Students Modal */}
-      {showAssignModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Assign Students</h2>
-            <div className="mb-6 space-y-2">
-              {availableStudents.map((student) => (
-                <label key={student.id} className="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedStudents.includes(student.id)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedStudents([...selectedStudents, student.id]);
-                      } else {
-                        setSelectedStudents(selectedStudents.filter(id => id !== student.id));
-                      }
-                    }}
-                    className="mr-3"
-                  />
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      {student.firstName} {student.lastName}
-                    </p>
-                    <p className="text-sm text-gray-600">{student.email}</p>
-                  </div>
-                </label>
-              ))}
+      {/* Assign Student Modal */}
+      <Modal
+        isOpen={showAssignStudentModal}
+        onClose={() => {
+          setShowAssignStudentModal(false);
+          setSelectedStudentId('');
+        }}
+        title="Assign Student"
+        description="Select a student to enroll in this course"
+      >
+        <form onSubmit={assignStudent} className="space-y-5">
+          {availableStudents.length === 0 ? (
+            <Alert variant="warning">
+              All available students are already enrolled in this course.
+            </Alert>
+          ) : (
+            <div className="space-y-2">
+              <label className="label">Select Student</label>
+              <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
+                {availableStudents.map((student) => (
+                  <label
+                    key={student.id}
+                    className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                      selectedStudentId === student.id
+                        ? 'bg-indigo-50 dark:bg-indigo-900/30 border-indigo-300 dark:border-indigo-700'
+                        : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="student"
+                      value={student.id}
+                      checked={selectedStudentId === student.id}
+                      onChange={(e) => setSelectedStudentId(e.target.value)}
+                      className="sr-only"
+                    />
+                    <div className="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-semibold text-sm">
+                      {student.firstName[0]}{student.lastName[0]}
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-white">
+                        {student.firstName} {student.lastName}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{student.email}</p>
+                    </div>
+                    {selectedStudentId === student.id && (
+                      <svg className="w-5 h-5 text-indigo-600 ml-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </label>
+                ))}
+              </div>
             </div>
-            <div className="flex space-x-3">
-              <button
-                onClick={() => {
-                  setShowAssignModal(false);
-                  setSelectedStudents([]);
-                }}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={assignStudents}
-                disabled={selectedStudents.length === 0}
-                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
-              >
-                Assign ({selectedStudents.length})
-              </button>
-            </div>
+          )}
+          <div className="flex gap-3 pt-4">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => {
+                setShowAssignStudentModal(false);
+                setSelectedStudentId('');
+              }}
+              fullWidth
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              loading={assigning} 
+              disabled={!selectedStudentId}
+              fullWidth
+            >
+              Assign Student
+            </Button>
           </div>
-        </div>
-      )}
+        </form>
+      </Modal>
     </div>
   );
 }

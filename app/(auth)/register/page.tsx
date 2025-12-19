@@ -4,11 +4,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import axios from '@/lib/axios';
-import { useAuth } from '@/lib/auth/AuthContext';
+import { Button } from '@/components/ui/Button';
+import { Input, Select } from '@/components/ui/Input';
+import { Alert } from '@/components/ui/Alert';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -17,149 +18,190 @@ export default function RegisterPage() {
     role: 'STUDENT',
   });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setLoading(true);
 
     try {
-      const response = await axios.post('/api/auth/register', formData);
+      const response = await axios.post('/auth/register', formData);
       
       if (formData.role === 'MENTOR') {
-        alert(response.data.message || 'Mentor account created. Waiting for admin approval.');
-        router.push('/login');
+        setSuccess('Mentor account created successfully! Please wait for admin approval before signing in.');
+        setTimeout(() => router.push('/login'), 3000);
       } else {
-        login(response.data.accessToken, response.data.user);
+        // Auto-login for students
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
         router.push('/dashboard');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Registration failed');
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
-        <div>
-          <h2 className="text-center text-3xl font-extrabold text-gray-900">
-            Create your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Join our learning platform
-          </p>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-              {error}
-            </div>
-          )}
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                I want to register as
-              </label>
-              <select
-                id="role"
-                name="role"
-                required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-              >
-                <option value="STUDENT">Student</option>
-                <option value="MENTOR">Mentor (requires approval)</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                First Name
-              </label>
-              <input
-                id="firstName"
-                name="firstName"
-                type="text"
-                required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-              />
-            </div>
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                Last Name
-              </label>
-              <input
-                id="lastName"
-                name="lastName"
-                type="text"
-                required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              />
-            </div>
-          </div>
+  const updateField = (field: string, value: string) => {
+    setFormData({ ...formData, [field]: value });
+  };
 
-          {formData.role === 'MENTOR' && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
-              <p className="text-sm text-yellow-800">
-                <strong>Note:</strong> Mentor accounts require admin approval before you can log in and create courses.
+  return (
+    <div className="min-h-screen gradient-mesh flex flex-col">
+      {/* Header */}
+      <header className="w-full py-6 px-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-lg">
+              <span className="text-white text-xl">📚</span>
+            </div>
+            <span className="text-2xl font-bold text-gradient">InternLMS</span>
+          </Link>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md">
+          {/* Card */}
+          <div className="glass-card rounded-2xl p-8 shadow-2xl animate-fadeInUp">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 rounded-2xl gradient-secondary flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Create your account
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                Join our learning platform today
               </p>
             </div>
-          )}
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300"
-            >
-              {loading ? 'Creating account...' : 'Register'}
-            </button>
-          </div>
+            {/* Alerts */}
+            {error && (
+              <div className="mb-6">
+                <Alert variant="error" onClose={() => setError('')}>
+                  {error}
+                </Alert>
+              </div>
+            )}
 
-          <div className="text-center">
-            <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
-              Already have an account? Sign in
-            </Link>
+            {success && (
+              <div className="mb-6">
+                <Alert variant="success">
+                  {success}
+                </Alert>
+              </div>
+            )}
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Role Selection */}
+              <Select
+                label="I want to register as"
+                id="role"
+                required
+                value={formData.role}
+                onChange={(e) => updateField('role', e.target.value)}
+                options={[
+                  { value: 'STUDENT', label: '🎓 Student' },
+                  { value: 'MENTOR', label: '👨‍🏫 Mentor (requires approval)' },
+                ]}
+              />
+
+              {/* Mentor Notice */}
+              {formData.role === 'MENTOR' && (
+                <Alert variant="warning" title="Mentor accounts require approval">
+                  An admin will review your registration before you can access the platform.
+                </Alert>
+              )}
+
+              {/* Name Fields */}
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="First Name"
+                  type="text"
+                  id="firstName"
+                  required
+                  value={formData.firstName}
+                  onChange={(e) => updateField('firstName', e.target.value)}
+                  placeholder="John"
+                />
+                <Input
+                  label="Last Name"
+                  type="text"
+                  id="lastName"
+                  required
+                  value={formData.lastName}
+                  onChange={(e) => updateField('lastName', e.target.value)}
+                  placeholder="Doe"
+                />
+              </div>
+
+              <Input
+                label="Email Address"
+                type="email"
+                id="email"
+                required
+                value={formData.email}
+                onChange={(e) => updateField('email', e.target.value)}
+                placeholder="you@example.com"
+                leftIcon={
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                }
+              />
+
+              <Input
+                label="Password"
+                type="password"
+                id="password"
+                required
+                value={formData.password}
+                onChange={(e) => updateField('password', e.target.value)}
+                placeholder="••••••••"
+                helperText="Minimum 6 characters"
+                leftIcon={
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                }
+              />
+
+              <Button
+                type="submit"
+                loading={loading}
+                fullWidth
+                size="lg"
+                variant="secondary"
+              >
+                Create Account
+              </Button>
+            </form>
+
+            {/* Footer */}
+            <div className="mt-8 text-center">
+              <p className="text-gray-600 dark:text-gray-400">
+                Already have an account?{' '}
+                <Link
+                  href="/login"
+                  className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors"
+                >
+                  Sign in
+                </Link>
+              </p>
+            </div>
           </div>
-        </form>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

@@ -6,7 +6,11 @@ import ProtectedRoute from '@/lib/auth/ProtectedRoute';
 import Navbar from '@/components/Navbar';
 import CourseCard from '@/components/CourseCard';
 import axios from '@/lib/axios';
-import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/Button';
+import { Modal } from '@/components/ui/Modal';
+import { Input, Textarea } from '@/components/ui/Input';
+import { LoadingCard } from '@/components/ui/Loading';
+import { Badge } from '@/components/ui/Badge';
 
 export default function MentorCoursesPage() {
   return (
@@ -18,10 +22,10 @@ export default function MentorCoursesPage() {
 
 function MentorCoursesContent() {
   const { user } = useAuth();
-  const router = useRouter();
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [creating, setCreating] = useState(false);
   const [newCourse, setNewCourse] = useState({ title: '', description: '' });
 
   useEffect(() => {
@@ -41,131 +45,174 @@ function MentorCoursesContent() {
 
   const createCourse = async (e: React.FormEvent) => {
     e.preventDefault();
+    setCreating(true);
     try {
       await axios.post('/api/courses', newCourse);
       setShowCreateModal(false);
       setNewCourse({ title: '', description: '' });
       fetchCourses();
-      alert('Course created successfully!');
     } catch (error: any) {
       alert(error.response?.data?.message || 'Error creating course');
+    } finally {
+      setCreating(false);
     }
   };
 
+  const totalChapters = courses.reduce((acc, c) => acc + (c._count?.chapters || 0), 0);
+  const totalStudents = courses.reduce((acc, c) => acc + (c._count?.assignments || 0), 0);
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Navbar />
-        <div className="flex items-center justify-center h-96">
-          <div className="text-gray-600">Loading...</div>
-        </div>
+        <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <div className="skeleton h-9 w-48 mb-3" />
+            <div className="skeleton h-5 w-72" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <LoadingCard key={i} />
+            ))}
+          </div>
+        </main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navbar />
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">My Courses</h1>
-              <p className="text-gray-600 mt-2">
-                Manage your courses and track student progress
-              </p>
-            </div>
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
-            >
-              + Create Course
-            </button>
+      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              My Courses
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Create and manage your courses
+            </p>
           </div>
-
-          {courses.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-md p-12 text-center">
-              <div className="text-6xl mb-4">📚</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">No Courses Yet</h3>
-              <p className="text-gray-600 mb-6">
-                Create your first course to get started!
-              </p>
-              <button
-                onClick={() => setShowCreateModal(true)}
-                className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
-              >
-                Create Your First Course
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {courses.map((course) => (
-                <div key={course.id} className="relative">
-                  <CourseCard course={course} role={user?.role || 'MENTOR'} />
-                  <div className="mt-2 text-sm text-gray-600">
-                    {course._count?.chapters || 0} chapters • {course._count?.assignments || 0} students
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <Button 
+            onClick={() => setShowCreateModal(true)}
+            icon={
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+            }
+          >
+            Create Course
+          </Button>
         </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          <div className="card p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
+              <span className="text-2xl">📚</span>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{courses.length}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Courses</p>
+            </div>
+          </div>
+          <div className="card p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+              <span className="text-2xl">📖</span>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalChapters}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Chapters</p>
+            </div>
+          </div>
+          <div className="card p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+              <span className="text-2xl">👥</span>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalStudents}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Students</p>
+            </div>
+          </div>
+        </div>
+
+        {courses.length === 0 ? (
+          /* Empty State */
+          <div className="card p-12 text-center">
+            <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-6">
+              <span className="text-5xl">📚</span>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+              No Courses Yet
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-6">
+              Create your first course to start teaching. Add chapters, assign students, and track their progress.
+            </p>
+            <Button onClick={() => setShowCreateModal(true)} icon={<span>+</span>}>
+              Create Your First Course
+            </Button>
+          </div>
+        ) : (
+          /* Course Grid */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {courses.map((course, index) => (
+              <div 
+                key={course.id} 
+                className="animate-fadeInUp"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <CourseCard course={course} role={user?.role || 'MENTOR'} />
+              </div>
+            ))}
+          </div>
+        )}
       </main>
 
       {/* Create Course Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Create New Course</h2>
-            <form onSubmit={createCourse}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Course Title *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={newCourse.title}
-                  onChange={(e) => setNewCourse({ ...newCourse, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., Introduction to Web Development"
-                />
-              </div>
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description *
-                </label>
-                <textarea
-                  required
-                  value={newCourse.description}
-                  onChange={(e) => setNewCourse({ ...newCourse, description: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  rows={4}
-                  placeholder="Describe what students will learn..."
-                />
-              </div>
-              <div className="flex space-x-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowCreateModal(false);
-                    setNewCourse({ title: '', description: '' });
-                  }}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  Create Course
-                </button>
-              </div>
-            </form>
+      <Modal
+        isOpen={showCreateModal}
+        onClose={() => {
+          setShowCreateModal(false);
+          setNewCourse({ title: '', description: '' });
+        }}
+        title="Create New Course"
+        description="Fill in the details to create a new course"
+      >
+        <form onSubmit={createCourse} className="space-y-5">
+          <Input
+            label="Course Title"
+            required
+            value={newCourse.title}
+            onChange={(e) => setNewCourse({ ...newCourse, title: e.target.value })}
+            placeholder="e.g., Introduction to Web Development"
+          />
+          <Textarea
+            label="Description"
+            required
+            value={newCourse.description}
+            onChange={(e) => setNewCourse({ ...newCourse, description: e.target.value })}
+            placeholder="Describe what students will learn in this course..."
+            rows={4}
+          />
+          <div className="flex gap-3 pt-4">
+            <Button 
+              type="button" 
+              variant="ghost" 
+              onClick={() => {
+                setShowCreateModal(false);
+                setNewCourse({ title: '', description: '' });
+              }}
+              fullWidth
+            >
+              Cancel
+            </Button>
+            <Button type="submit" loading={creating} fullWidth>
+              Create Course
+            </Button>
           </div>
-        </div>
-      )}
+        </form>
+      </Modal>
     </div>
   );
 }
