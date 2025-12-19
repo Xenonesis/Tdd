@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/shadcn-index';
 import { Badge } from '@/components/ui/shadcn-index';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/shadcn-index';
 import { Progress } from '@/components/ui/shadcn-index';
+import { ModeToggle } from '@/components/mode-toggle';
+import { BookOpen, Lock, GraduationCap, BarChart, PlayCircle, CheckCircle } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -17,6 +19,7 @@ export default function Home() {
             <span className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">InternLMS</span>
           </Link>
           <div className="flex items-center gap-4">
+            <ModeToggle />
             <Button variant="ghost" className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50" asChild>
               <Link href="/login">
                 Sign In
@@ -101,17 +104,17 @@ export default function Home() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { title: "Sequential Learning", desc: "Unlock knowledge step-by-step. No skipping ensures mastery.", icon: "📚", color: "indigo" },
-                { title: "Role-Based Access", desc: "Distinct interfaces for Students, Mentors, and Admins.", icon: "🔐", color: "emerald" },
-                { title: "Smart Certificates", desc: "Auto-generated, verifiable PDF certificates designed for LinkedIn.", icon: "🎓", color: "amber" },
-                { title: "Progress Analytics", desc: "Visual data tracking for every milestone achieved.", icon: "bar_chart", color: "pink" },
-                { title: "Rich Media Support", desc: "Seamless integration of video, audio, and interactive content.", icon: "play_circle", color: "cyan" },
-                { title: "Quality Assurance", desc: "Rigorous mentor approval workflows built-in.", icon: "verified", color: "violet" },
+                { title: "Sequential Learning", desc: "Unlock knowledge step-by-step. No skipping ensures mastery.", icon: BookOpen },
+                { title: "Role-Based Access", desc: "Distinct interfaces for Students, Mentors, and Admins.", icon: Lock },
+                { title: "Smart Certificates", desc: "Auto-generated, verifiable PDF certificates designed for LinkedIn.", icon: GraduationCap },
+                { title: "Progress Analytics", desc: "Visual data tracking for every milestone achieved.", icon: BarChart },
+                { title: "Rich Media Support", desc: "Seamless integration of video, audio, and interactive content.", icon: PlayCircle },
+                { title: "Quality Assurance", desc: "Rigorous mentor approval workflows built-in.", icon: CheckCircle },
               ].map((feature, i) => (
                 <Card key={i} className={`glass-card border-0 shadow-sm hover:shadow-md transition-all duration-300 group bg-white/50 dark:bg-gray-800/50`}>
                   <CardHeader>
                     <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
-                      <span className="text-2xl select-none">{feature.icon}</span>
+                      <feature.icon className="w-6 h-6" />
                     </div>
                     <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">{feature.title}</CardTitle>
                     <CardDescription className="leading-relaxed mt-2 text-gray-500 dark:text-gray-400">{feature.desc}</CardDescription>
