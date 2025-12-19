@@ -56,131 +56,156 @@
 }
 
 /* ============================================
-   DESIGN SYSTEM - LMS Premium Theme
+   DESIGN SYSTEM - Professional Minimalist
    ============================================ */
 
 :root {
-  /* Primary Colors - Modern Indigo/Violet */
-  --primary-50: #eef2ff;
-  --primary-100: #e0e7ff;
-  --primary-200: #c7d2fe;
-  --primary-300: #a5b4fc;
-  --primary-400: #818cf8;
-  --primary-500: #6366f1;
-  --primary-600: #4f46e5;
-  --primary-700: #4338ca;
-  --primary-800: #3730a3;
-  --primary-900: #312e81;
+  /* Brand Color - Deep/Vibrant Violet-Indigo */
+  --primary-50: #efeffd;
+  --primary-100: #e2e1fb;
+  --primary-200: #c9c7f7;
+  --primary-300: #a5a2f1;
+  --primary-400: #817be9;
+  --primary-500: #635bff;  /* Stripe-like Indigo */
+  --primary-600: #5242e6;
+  --primary-700: #4333c8;
+  --primary-800: #372b9f;
+  --primary-900: #30277f;
+  --primary-950: #1d174e;
 
-  /* Secondary Colors - Emerald */
-  --secondary-50: #ecfdf5;
-  --secondary-100: #d1fae5;
-  --secondary-200: #a7f3d0;
-  --secondary-300: #6ee7b7;
-  --secondary-400: #34d399;
-  --secondary-500: #10b981;
-  --secondary-600: #059669;
-  --secondary-700: #047857;
-  --secondary-800: #065f46;
-  --secondary-900: #064e3b;
+  /* Neutrals - Slate/Zinc for professional crispness */
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --gray-950: #020617;
 
-  /* Accent Colors - Amber */
-  --accent-50: #fffbeb;
-  --accent-100: #fef3c7;
-  --accent-200: #fde68a;
-  --accent-300: #fcd34d;
-  --accent-400: #fbbf24;
-  --accent-500: #f59e0b;
-  --accent-600: #d97706;
-  --accent-700: #b45309;
-  --accent-800: #92400e;
-  --accent-900: #78350f;
+  /* Semantic Colors - Muted/Pastel for Minimalism */
+  --success-500: #10b981;
+  --warning-500: #f59e0b;
+  --error-500: #ef4444;
 
-  /* Danger Colors - Rose */
-  --danger-50: #fff1f2;
-  --danger-100: #ffe4e6;
-  --danger-200: #fecdd3;
-  --danger-300: #fda4af;
-  --danger-400: #fb7185;
-  --danger-500: #f43f5e;
-  --danger-600: #e11d48;
-  --danger-700: #be123c;
-  --danger-800: #9f1239;
-  --danger-900: #881337;
-
-  /* Neutral Colors */
-  --gray-50: #f9fafb;
-  --gray-100: #f3f4f6;
-  --gray-200: #e5e7eb;
-  --gray-300: #d1d5db;
-  --gray-400: #9ca3af;
-  --gray-500: #6b7280;
-  --gray-600: #4b5563;
-  --gray-700: #374151;
-  --gray-800: #1f2937;
-  --gray-900: #111827;
-  --gray-950: #030712;
-
-  /* Light Mode */
+  /* Theme Variables */
   --background: #ffffff;
-  --foreground: #111827;
+  --foreground: var(--gray-900);
+  
   --card: #ffffff;
-  --card-foreground: #111827;
-  --muted: #f3f4f6;
-  --muted-foreground: #6b7280;
-  --border: #e5e7eb;
-  --ring: #6366f1;
+  --card-foreground: var(--gray-900);
+  
+  --popover: #ffffff;
+  --popover-foreground: var(--gray-900);
+  
+  --primary: var(--primary-600);
+  --primary-foreground: #ffffff;
+  
+  --secondary: var(--gray-100);
+  --secondary-foreground: var(--gray-900);
+  
+  --muted: var(--gray-100);
+  --muted-foreground: var(--gray-500);
+  
+  --accent: var(--gray-100);
+  --accent-foreground: var(--gray-900);
+  
+  --destructive: var(--error-500);
+  --destructive-foreground: #ffffff;
+  
+  --border: var(--gray-200);
+  --input: var(--gray-200);
+  --ring: var(--primary-500);
+  
+  --radius: 0.75rem; /* Slightly larger for modern feel */
 
-  /* Shadows */
+  /* Shadows - Ultra smooth/diffused */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-
-  /* Gradients */
-  --gradient-primary: linear-gradient(
-    135deg,
-    var(--primary-500) 0%,
-    var(--primary-600) 50%,
-    var(--primary-700) 100%
-  );
-  --gradient-secondary: linear-gradient(135deg, var(--secondary-500) 0%, var(--secondary-600) 100%);
-  --gradient-accent: linear-gradient(135deg, var(--accent-400) 0%, var(--accent-500) 100%);
-  --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-glass: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+  
+  /* Gradients - Subtle */
+  --gradient-primary: linear-gradient(135deg, var(--primary-600), var(--primary-500));
+  --gradient-hero: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%); /* Deep Professional Blue */
+  
   /* Border Radius */
-  --radius-sm: 0.375rem;
-  --radius: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-full: 9999px;
-
-  /* Transitions */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
 }
 
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #f1f5f9;
-    --card: #1e293b;
-    --card-foreground: #f1f5f9;
-    --muted: #1e293b;
-    --muted-foreground: #94a3b8;
-    --border: #334155;
-  }
+.dark {
+  --background: var(--gray-950);
+  --foreground: var(--gray-50);
+
+  --card: var(--gray-900);
+  --card-foreground: var(--gray-50);
+  
+  --popover: var(--gray-900);
+  --popover-foreground: var(--gray-50);
+  
+  --primary: var(--primary-500);
+  --primary-foreground: #ffffff;
+  
+  --secondary: var(--gray-800);
+  --secondary-foreground: var(--gray-50);
+  
+  --muted: var(--gray-800);
+  --muted-foreground: var(--gray-400);
+  
+  --accent: var(--gray-800);
+  --accent-foreground: var(--gray-50);
+  
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: var(--gray-50);
+  
+  --border: var(--gray-800);
+  --input: var(--gray-800);
+  --ring: var(--primary-400);
+}
+
+/* Glass Morphism - Clean & Subtle */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.dark .glass {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dark .glass-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+}
+
+/* Minimalist Backgrounds */
+.gradient-mesh {
+  background-color: var(--background);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(99, 91, 255, 0.03) 0%, transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(99, 91, 255, 0.03) 0%, transparent 25%);
+}
+
+.dark .gradient-mesh {
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(99, 91, 255, 0.08) 0%, transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(99, 91, 255, 0.05) 0%, transparent 25%);
 }
 
 /* ============================================
@@ -198,13 +223,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  font-family: var(--font-geist-sans), 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -214,252 +233,23 @@ body {
    ANIMATIONS
    ============================================ */
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+.animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
+.animate-fadeInUp { animation: fadeInUp 0.5s ease-out forwards; }
+.animate-fadeInDown { animation: fadeInDown 0.5s ease-out forwards; }
+.animate-scaleIn { animation: scaleIn 0.3s ease-out forwards; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-shimmer { animation: shimmer 2s infinite; }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(-25%);
-    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-  }
-  50% {
-    transform: translateY(0);
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes glow {
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
-  }
-}
-
-/* Animation Classes */
-.animate-fadeIn {
-  animation: fadeIn 0.5s ease-out forwards;
-}
-.animate-fadeInUp {
-  animation: fadeInUp 0.5s ease-out forwards;
-}
-.animate-fadeInDown {
-  animation: fadeInDown 0.5s ease-out forwards;
-}
-.animate-slideInLeft {
-  animation: slideInLeft 0.5s ease-out forwards;
-}
-.animate-slideInRight {
-  animation: slideInRight 0.5s ease-out forwards;
-}
-.animate-scaleIn {
-  animation: scaleIn 0.3s ease-out forwards;
-}
-.animate-pulse {
-  animation: pulse 2s ease-in-out infinite;
-}
-.animate-shimmer {
-  animation: shimmer 2s infinite;
-}
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-.animate-bounce {
-  animation: bounce 1s infinite;
-}
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-.animate-glow {
-  animation: glow 2s ease-in-out infinite;
-}
-
-/* Staggered Animations */
-.stagger-1 {
-  animation-delay: 0.1s;
-}
-.stagger-2 {
-  animation-delay: 0.2s;
-}
-.stagger-3 {
-  animation-delay: 0.3s;
-}
-.stagger-4 {
-  animation-delay: 0.4s;
-}
-.stagger-5 {
-  animation-delay: 0.5s;
-}
-
-/* ============================================
-   GLASS MORPHISM
-   ============================================ */
-
-.glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-@media (prefers-color-scheme: dark) {
-  .glass {
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .glass-card {
-    background: rgba(30, 41, 59, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-}
-
-/* ============================================
-   GRADIENTS & BACKGROUNDS
-   ============================================ */
-
-.gradient-primary {
-  background: var(--gradient-primary);
-}
-
-.gradient-secondary {
-  background: var(--gradient-secondary);
-}
-
-.gradient-hero {
-  background: var(--gradient-hero);
-}
-
-.gradient-mesh {
-  background-color: #f3f4f6;
-  background-image:
-    radial-gradient(at 40% 20%, var(--primary-100) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, var(--secondary-100) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, var(--accent-100) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, var(--primary-50) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, var(--secondary-100) 0px, transparent 50%),
-    radial-gradient(at 80% 100%, var(--accent-50) 0px, transparent 50%);
-}
-
-@media (prefers-color-scheme: dark) {
-  .gradient-mesh {
-    background-color: #0f172a;
-    background-image:
-      radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-      radial-gradient(at 80% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
-      radial-gradient(at 0% 50%, rgba(245, 158, 11, 0.1) 0px, transparent 50%);
-  }
-}
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
 
 /* ============================================
    UTILITY CLASSES
@@ -487,8 +277,7 @@ body {
   border-radius: var(--radius);
 }
 
-@media (prefers-color-scheme: dark) {
-  .skeleton {
+  .dark .skeleton {
     background: linear-gradient(
       90deg,
       var(--gray-700) 25%,
@@ -497,7 +286,6 @@ body {
     );
     background-size: 200% 100%;
   }
-}
 
 /* Focus Ring */
 .focus-ring {
@@ -593,11 +381,9 @@ body {
   background: var(--primary-50);
 }
 
-@media (prefers-color-scheme: dark) {
-  .btn-outline:hover:not(:disabled) {
+  .dark .btn-outline:hover:not(:disabled) {
     background: rgba(99, 102, 241, 0.1);
   }
-}
 
 .btn-ghost {
   background: transparent;
@@ -609,12 +395,10 @@ body {
   color: var(--gray-900);
 }
 
-@media (prefers-color-scheme: dark) {
-  .btn-ghost:hover:not(:disabled) {
+  .dark .btn-ghost:hover:not(:disabled) {
     background: var(--gray-700);
     color: var(--gray-100);
   }
-}
 
 .btn-danger {
   background: var(--danger-500);
@@ -653,11 +437,9 @@ body {
   border-color: var(--primary-200);
 }
 
-@media (prefers-color-scheme: dark) {
-  .card-hover:hover {
+  .dark .card-hover:hover {
     border-color: var(--primary-700);
   }
-}
 
 /* Input Fields */
 .input {
@@ -690,11 +472,9 @@ body {
   margin-bottom: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  .label {
+  .dark .label {
     color: var(--gray-300);
   }
-}
 
 /* Badges */
 .badge {
@@ -733,28 +513,26 @@ body {
   color: var(--gray-700);
 }
 
-@media (prefers-color-scheme: dark) {
-  .badge-primary {
+  .dark .badge-primary {
     background: rgba(99, 102, 241, 0.2);
     color: var(--primary-300);
   }
-  .badge-secondary {
+  .dark .badge-secondary {
     background: rgba(16, 185, 129, 0.2);
     color: var(--secondary-300);
   }
-  .badge-accent {
+  .dark .badge-accent {
     background: rgba(245, 158, 11, 0.2);
     color: var(--accent-300);
   }
-  .badge-danger {
+  .dark .badge-danger {
     background: rgba(244, 63, 94, 0.2);
     color: var(--danger-300);
   }
-  .badge-gray {
+  .dark .badge-gray {
     background: rgba(107, 114, 128, 0.2);
     color: var(--gray-300);
   }
-}
 
 /* Progress Bar */
 .progress-bar {
@@ -776,11 +554,9 @@ body {
   background: var(--gradient-secondary);
 }
 
-@media (prefers-color-scheme: dark) {
-  .progress-bar {
+  .dark .progress-bar {
     background: var(--gray-700);
   }
-}
 
 /* Modal/Dialog */
 .modal-overlay {

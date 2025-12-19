@@ -6,443 +6,171 @@ import { Progress } from '@/components/ui/shadcn-index';
 
 export default function Home() {
   return (
-    <div className="min-h-screen gradient-mesh">
+    <div className="min-h-screen gradient-mesh font-sans text-gray-900 dark:text-gray-50 flex flex-col">
       {/* Header */}
-      <header className="relative z-10">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-lg">
-                <span className="text-white text-xl">📚</span>
-              </div>
-              <span className="text-2xl font-bold text-gradient">InternLMS</span>
-            </Link>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" asChild>
-                <Link href="/login">
-                  Sign In
-                </Link>
-              </Button>
-              <Button asChild>
-                <Link href="/register">
-                  Get Started
-                </Link>
-              </Button>
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50 transition-all duration-300">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center text-white shadow-sm group-hover:bg-primary-700 transition-colors">
+              <span className="font-bold">I</span>
             </div>
-          </div>
-        </nav>
-      </header>
-
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        {/* Background Decorations */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-indigo-400/30 to-purple-400/30 rounded-full blur-3xl animate-float" />
-          <div className="absolute top-60 -left-40 w-80 h-80 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-          <div className="absolute bottom-20 right-20 w-60 h-60 bg-gradient-to-br from-amber-400/20 to-orange-400/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }} />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700 mb-8 animate-fadeInDown">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-indigo-700 dark:text-indigo-300">
-                Built with Test-Driven Development
-              </span>
-            </div>
-
-            {/* Main Heading */}
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 animate-fadeInUp leading-tight">
-              Master Your{' '}
-              <span className="text-gradient-hero">Internship</span>{' '}
-              Journey
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto animate-fadeInUp stagger-1">
-              A comprehensive Learning Management System with role-based access, 
-              sequential chapter progression, and automated certificate generation.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fadeInUp stagger-2">
-              <Button size="lg" asChild>
-                <Link href="/register">
-                  Start Learning Free
-                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link href="/login">
-                  Sign In
-                </Link>
-              </Button>
-            </div>
-
-            {/* Stats */}
-            <div className="mt-16 grid grid-cols-3 gap-8 max-w-xl mx-auto animate-fadeInUp stagger-3">
-              <div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">100%</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">Secure Auth</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">3</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">User Roles</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">PDF</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">Certificates</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-24 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Everything You Need to{' '}
-              <span className="text-gradient">Succeed</span>
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Our platform provides all the tools for effective internship training and management.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <Card className="group hover-lift transition-all">
-              <CardHeader>
-                <div className="w-14 h-14 rounded-2xl gradient-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">📚</span>
-                </div>
-                <CardTitle className="text-xl">Sequential Learning</CardTitle>
-                <CardDescription>
-                  Progress through chapters in order. No skipping allowed - ensuring complete understanding before moving forward.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  <span>Learning Path</span>
-                  <span>100%</span>
-                </div>
-                <Progress value={100} className="h-2" />
-              </CardContent>
-            </Card>
-
-            {/* Feature 2 */}
-            <Card className="group hover-lift transition-all">
-              <CardHeader>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">🔐</span>
-                </div>
-                <CardTitle className="text-xl">Role-Based Access</CardTitle>
-                <CardDescription>
-                  Students learn, Mentors teach and manage courses, Admins oversee the entire platform securely.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  <span>Security Level</span>
-                  <span>100%</span>
-                </div>
-                <Progress value={100} className="h-2" />
-              </CardContent>
-            </Card>
-
-            {/* Feature 3 */}
-            <Card className="group hover-lift transition-all">
-              <CardHeader>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">🎓</span>
-                </div>
-                <CardTitle className="text-xl">Certificates</CardTitle>
-                <CardDescription>
-                  Earn official PDF certificates upon 100% course completion. Download and share your achievements.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  <span>Certificate Quality</span>
-                  <span>100%</span>
-                </div>
-                <Progress value={100} className="h-2" />
-              </CardContent>
-            </Card>
-
-            {/* Feature 4 */}
-            <Card className="group hover-lift transition-all">
-              <CardHeader>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">📊</span>
-                </div>
-                <CardTitle className="text-xl">Progress Tracking</CardTitle>
-                <CardDescription>
-                  Visual progress bars and completion percentages keep you motivated and on track.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  <span>Tracking Accuracy</span>
-                  <span>100%</span>
-                </div>
-                <Progress value={100} className="h-2" />
-              </CardContent>
-            </Card>
-
-            {/* Feature 5 */}
-            <Card className="group hover-lift transition-all">
-              <CardHeader>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">🎥</span>
-                </div>
-                <CardTitle className="text-xl">Rich Media Content</CardTitle>
-                <CardDescription>
-                  Courses include images and video links for comprehensive, engaging learning experiences.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  <span>Media Quality</span>
-                  <span>100%</span>
-                </div>
-                <Progress value={100} className="h-2" />
-              </CardContent>
-            </Card>
-
-            {/* Feature 6 */}
-            <Card className="group hover-lift transition-all">
-              <CardHeader>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">✅</span>
-                </div>
-                <CardTitle className="text-xl">Mentor Approval</CardTitle>
-                <CardDescription>
-                  Quality control through admin approval ensures only qualified mentors can teach.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  <span>Quality Control</span>
-                  <span>100%</span>
-                </div>
-                <Progress value={100} className="h-2" />
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Tech Stack Section */}
-      <section className="py-24 gradient-mesh">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Built with Modern{' '}
-              <span className="text-gradient">Technology</span>
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Enterprise-grade tech stack ensuring performance, security, and scalability.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="glass-card p-6 text-center hover-lift">
-              <div className="text-4xl mb-3">⚛️</div>
-              <h3 className="font-bold text-gray-900 dark:text-white mb-1">Next.js</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">React Framework</p>
-            </div>
-            <div className="glass-card p-6 text-center hover-lift">
-              <div className="text-4xl mb-3">🚀</div>
-              <h3 className="font-bold text-gray-900 dark:text-white mb-1">NestJS</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Backend API</p>
-            </div>
-            <div className="glass-card p-6 text-center hover-lift">
-              <div className="text-4xl mb-3">🗄️</div>
-              <h3 className="font-bold text-gray-900 dark:text-white mb-1">Prisma</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Database ORM</p>
-            </div>
-            <div className="glass-card p-6 text-center hover-lift">
-              <div className="text-4xl mb-3">🔑</div>
-              <h3 className="font-bold text-gray-900 dark:text-white mb-1">JWT Auth</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Secure Sessions</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Roles Section */}
-      <section className="py-24 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Three Roles,{' '}
-              <span className="text-gradient">One Platform</span>
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Each role has specific permissions and features tailored to their needs.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Student */}
-            <Card className="border-t-4 border-emerald-500 hover-lift transition-all">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                    <span className="text-2xl">🎓</span>
-                  </div>
-                  <div>
-                    <CardTitle className="text-xl">Student</CardTitle>
-                    <Badge variant="secondary" className="mt-1">Learner</Badge>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-gray-600 dark:text-gray-300">
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-500 mt-1">✓</span>
-                    <span>View assigned courses only</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-500 mt-1">✓</span>
-                    <span>Sequential chapter progression</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-500 mt-1">✓</span>
-                    <span>Track learning progress</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-500 mt-1">✓</span>
-                    <span>Download completion certificates</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            {/* Mentor */}
-            <Card className="border-t-4 border-indigo-500 hover-lift transition-all relative">
-              <div className="absolute -top-3 right-4">
-                <Badge variant="outline">Requires Approval</Badge>
-              </div>
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
-                    <span className="text-2xl">👨‍🏫</span>
-                  </div>
-                  <div>
-                    <CardTitle className="text-xl">Mentor</CardTitle>
-                    <Badge className="mt-1">Instructor</Badge>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-gray-600 dark:text-gray-300">
-                  <li className="flex items-start gap-2">
-                    <span className="text-indigo-500 mt-1">✓</span>
-                    <span>Create and manage courses</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-indigo-500 mt-1">✓</span>
-                    <span>Add chapters with media</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-indigo-500 mt-1">✓</span>
-                    <span>Assign students to courses</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-indigo-500 mt-1">✓</span>
-                    <span>Track student progress</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            {/* Admin */}
-            <Card className="border-t-4 border-amber-500 hover-lift transition-all">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-                    <span className="text-2xl">👑</span>
-                  </div>
-                  <div>
-                    <CardTitle className="text-xl">Admin</CardTitle>
-                    <Badge variant="destructive" className="mt-1">Administrator</Badge>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-gray-600 dark:text-gray-300">
-                  <li className="flex items-start gap-2">
-                    <span className="text-amber-500 mt-1">✓</span>
-                    <span>Approve/reject mentors</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-amber-500 mt-1">✓</span>
-                    <span>Manage all users</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-amber-500 mt-1">✓</span>
-                    <span>View platform analytics</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-amber-500 mt-1">✓</span>
-                    <span>Full system access</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 gradient-hero opacity-90" />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Ready to Start Your Learning Journey?
-          </h2>
-          <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-            Join our platform today and take the first step towards mastering your internship skills.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-indigo-600 hover:bg-gray-100 shadow-xl" asChild>
-              <Link href="/register">
-                Create Free Account
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" className="bg-white/10 text-white border-2 border-white/30 hover:bg-white/20" asChild>
+            <span className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">InternLMS</span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50" asChild>
               <Link href="/login">
                 Sign In
               </Link>
             </Button>
+            <Button className="rounded-full px-6 font-medium shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 transition-shadow bg-primary-600 hover:bg-primary-700 text-white border-0" asChild>
+              <Link href="/register">
+                Get Started
+              </Link>
+            </Button>
           </div>
-        </div>
-      </section>
+        </nav>
+      </header>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center">
-                <span className="text-white text-xl">📚</span>
-              </div>
-              <span className="text-xl font-bold text-white">InternLMS</span>
+      <main className="flex-grow pt-16">
+        {/* Hero Section */}
+        <section className="relative pt-24 pb-32 sm:pt-32 sm:pb-40 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-50 dark:bg-primary-900/30 border border-primary-100 dark:border-primary-800 mb-8 animate-fadeInDown backdrop-blur-sm">
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
+              </span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-primary-700 dark:text-primary-300">
+                v2.0 with TDD
+              </span>
             </div>
-            <p className="text-center md:text-left">
-              Built with ❤️ using Test-Driven Development principles
+
+            {/* Main Heading */}
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-8 animate-fadeInUp text-gray-900 dark:text-white">
+              Master Your <br className="hidden sm:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-400 hover-lift inline-block cursor-default pb-2">Internship Journey</span>
+            </h1>
+
+            {/* Subtitle */}
+            <p className="text-xl text-gray-500 dark:text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed animate-fadeInUp stagger-1 font-light">
+              The modern learning platform designed for professional growth. 
+              Sequential chapters, role-based workflows, and automated certification.
             </p>
-            <div className="flex items-center gap-4">
-              <span className="text-sm">© 2024 InternLMS</span>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fadeInUp stagger-2">
+              <Button size="lg" className="h-12 px-8 rounded-full text-base shadow-xl shadow-primary-500/20 hover:translate-y-[-2px] transition-all bg-primary-600 hover:bg-primary-700 text-white" asChild>
+                <Link href="/register">
+                  Start Learning Free
+                </Link>
+              </Button>
+              <Button variant="outline" size="lg" className="h-12 px-8 rounded-full text-base bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-800 shadow-sm text-gray-700 dark:text-gray-300" asChild>
+                <Link href="/login">
+                  Live Demo
+                </Link>
+              </Button>
+            </div>
+
+            {/* Abstract Visual/Stats */}
+            <div className="mt-20 pt-10 border-t border-gray-100 dark:border-gray-800 max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 animate-fadeInUp stagger-3">
+              <div className="flex flex-col items-center">
+                 <div className="text-3xl font-bold text-gray-900 dark:text-white">100%</div>
+                 <div className="text-sm font-medium text-gray-500">Verified Certificates</div>
+              </div>
+              <div className="flex flex-col items-center">
+                 <div className="text-3xl font-bold text-gray-900 dark:text-white">Zero</div>
+                 <div className="text-sm font-medium text-gray-500">Setup Cost</div>
+              </div>
+              <div className="flex flex-col items-center">
+                 <div className="text-3xl font-bold text-gray-900 dark:text-white">Pro</div>
+                 <div className="text-sm font-medium text-gray-500">Mentorship Access</div>
+              </div>
             </div>
           </div>
+        </section>
+
+        {/* Features Grid */}
+        <section className="py-24 bg-white dark:bg-gray-900/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-gray-900 dark:text-white">Precision Engineered Tools</h2>
+              <p className="text-lg text-gray-500 dark:text-gray-400">Everything you need, nothing you don't.</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                { title: "Sequential Learning", desc: "Unlock knowledge step-by-step. No skipping ensures mastery.", icon: "📚", color: "indigo" },
+                { title: "Role-Based Access", desc: "Distinct interfaces for Students, Mentors, and Admins.", icon: "🔐", color: "emerald" },
+                { title: "Smart Certificates", desc: "Auto-generated, verifiable PDF certificates designed for LinkedIn.", icon: "🎓", color: "amber" },
+                { title: "Progress Analytics", desc: "Visual data tracking for every milestone achieved.", icon: "bar_chart", color: "pink" },
+                { title: "Rich Media Support", desc: "Seamless integration of video, audio, and interactive content.", icon: "play_circle", color: "cyan" },
+                { title: "Quality Assurance", desc: "Rigorous mentor approval workflows built-in.", icon: "verified", color: "violet" },
+              ].map((feature, i) => (
+                <Card key={i} className={`glass-card border-0 shadow-sm hover:shadow-md transition-all duration-300 group bg-white/50 dark:bg-gray-800/50`}>
+                  <CardHeader>
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
+                      <span className="text-2xl select-none">{feature.icon}</span>
+                    </div>
+                    <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">{feature.title}</CardTitle>
+                    <CardDescription className="leading-relaxed mt-2 text-gray-500 dark:text-gray-400">{feature.desc}</CardDescription>
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Roles Section - Minimal */}
+        <section className="py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+             <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
+                {/* Student */}
+                <div className="p-8 rounded-3xl bg-gray-50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors duration-300 border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
+                   <div className="text-4xl mb-4">🎓</div>
+                   <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Student</h3>
+                   <p className="text-sm text-gray-500 dark:text-gray-400">Focus on learning paths and achieving certification with distraction-free interfaces.</p>
+                </div>
+                {/* Mentor */}
+                <div className="p-8 rounded-3xl bg-primary-50 dark:bg-primary-900/10 border border-primary-100 dark:border-primary-800/30">
+                   <div className="text-4xl mb-4">👨‍🏫</div>
+                   <h3 className="text-xl font-bold mb-2 text-primary-900 dark:text-primary-100">Mentor</h3>
+                   <p className="text-sm text-primary-700/70 dark:text-primary-300/70">Tools to create courseware, track cohorts, and validate student milestones.</p>
+                </div>
+                {/* Admin */}
+                <div className="p-8 rounded-3xl bg-gray-50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors duration-300 border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
+                   <div className="text-4xl mb-4">🛡️</div>
+                   <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Admin</h3>
+                   <p className="text-sm text-gray-500 dark:text-gray-400">Complete system oversight, analytics, and user management capabilities.</p>
+                </div>
+             </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="py-32 relative text-center px-4 overflow-hidden">
+           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary-50/50 dark:to-primary-900/20 pointer-events-none" />
+           <div className="max-w-3xl mx-auto relative z-10">
+              <h2 className="text-4xl sm:text-5xl font-bold mb-6 tracking-tight text-gray-900 dark:text-white">Ready to excel?</h2>
+              <p className="text-xl text-gray-500 dark:text-gray-400 mb-10">Join thousands of interns mastering their craft today.</p>
+              <Button size="lg" className="rounded-full px-10 py-6 text-lg shadow-2xl shadow-primary-500/30 hover:scale-105 transition-transform bg-primary-600 hover:bg-primary-700 text-white" asChild>
+                <Link href="/register">Get Started Now</Link>
+              </Button>
+           </div>
+        </section>
+
+      </main>
+
+      {/* Minimal Footer */}
+      <footer className="border-t border-gray-200 dark:border-gray-800 py-12 bg-white dark:bg-gray-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between opacity-60 hover:opacity-100 transition-opacity">
+           <p className="text-sm text-gray-500 dark:text-gray-400">© 2024 InternLMS Inc. All rights reserved.</p>
+           <div className="flex gap-6 mt-4 md:mt-0 text-sm">
+              <Link href="#" className="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">Privacy</Link>
+              <Link href="#" className="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">Terms</Link>
+              <Link href="#" className="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">Contact</Link>
+           </div>
         </div>
       </footer>
     </div>

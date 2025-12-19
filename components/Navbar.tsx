@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { RoleBadge } from './ui/Badge';
+import { ModeToggle } from './mode-toggle';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -74,6 +75,7 @@ export default function Navbar() {
 
           {/* Right Section */}
           <div className="flex items-center gap-3">
+             <ModeToggle />
             {/* Profile Dropdown */}
             <div className="relative">
               <button
