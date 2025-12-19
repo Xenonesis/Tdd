@@ -3,159 +3,199 @@ import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
-async function main() {
-  console.log('🌱 Seeding database...');
+// Define Role enum matching Prisma schema
+type Role = 'STUDENT' | 'MENTOR' | 'ADMIN';
 
-  // Create Admin user
-  const adminPassword = await bcrypt.hash('admin123', 10);
+async function main() {
+  console.log('🌱 Starting database seed...\n');
+
+  // Hash function
+  const hashPassword = async (password: string) => {
+    return await bcrypt.hash(password, 10);
+  };
+
+  // Create Admin User
+  const adminPassword = await hashPassword('admin123');
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@lms.com' },
+    where: { email: 'admin@internlms.com' },
     update: {},
     create: {
-      email: 'admin@lms.com',
+      email: 'admin@internlms.com',
       password: adminPassword,
-      firstName: 'Admin',
-      lastName: 'User',
-      role: 'ADMIN',
+      firstName: 'System',
+      lastName: 'Admin',
+      role: 'ADMIN' as Role,
       isActive: true,
     },
   });
-  console.log('✓ Admin user created');
+  console.log('✅ Admin created:', admin.email);
 
-  // Create Mentor user (active)
-  const mentorPassword = await bcrypt.hash('mentor123', 10);
+  // Create a Mentor (approved)
+  const mentorPassword = await hashPassword('mentor123');
   const mentor = await prisma.user.upsert({
-    where: { email: 'mentor@lms.com' },
+    where: { email: 'mentor@internlms.com' },
     update: {},
     create: {
-      email: 'mentor@lms.com',
+      email: 'mentor@internlms.com',
       password: mentorPassword,
       firstName: 'John',
       lastName: 'Mentor',
-      role: 'MENTOR',
+      role: 'MENTOR' as Role,
       isActive: true,
     },
   });
-  console.log('✓ Mentor user created');
+  console.log('✅ Mentor created:', mentor.email);
 
-  // Create Student users
-  const studentPassword = await bcrypt.hash('student123', 10);
-  const student1 = await prisma.user.upsert({
-    where: { email: 'student1@lms.com' },
+  // Create a pending Mentor (for testing approval workflow)
+  const pendingMentorPassword = await hashPassword('pending123');
+  const pendingMentor = await prisma.user.upsert({
+    where: { email: 'pending.mentor@internlms.com' },
     update: {},
     create: {
-      email: 'student1@lms.com',
+      email: 'pending.mentor@internlms.com',
+      password: pendingMentorPassword,
+      firstName: 'Pending',
+      lastName: 'Mentor',
+      role: 'MENTOR' as Role,
+      isActive: false, // Requires admin approval
+    },
+  });
+  console.log('✅ Pending Mentor created:', pendingMentor.email);
+
+  // Create Students
+  const studentPassword = await hashPassword('student123');
+  const student1 = await prisma.user.upsert({
+    where: { email: 'student1@internlms.com' },
+    update: {},
+    create: {
+      email: 'student1@internlms.com',
       password: studentPassword,
       firstName: 'Alice',
       lastName: 'Student',
-      role: 'STUDENT',
+      role: 'STUDENT' as Role,
       isActive: true,
     },
   });
+  console.log('✅ Student 1 created:', student1.email);
 
   const student2 = await prisma.user.upsert({
-    where: { email: 'student2@lms.com' },
+    where: { email: 'student2@internlms.com' },
     update: {},
     create: {
-      email: 'student2@lms.com',
+      email: 'student2@internlms.com',
       password: studentPassword,
       firstName: 'Bob',
-      lastName: 'Learner',
-      role: 'STUDENT',
+      lastName: 'Student',
+      role: 'STUDENT' as Role,
       isActive: true,
     },
   });
-  console.log('✓ Student users created');
+  console.log('✅ Student 2 created:', student2.email);
 
-  // Create a sample course
-  const course = await prisma.course.create({
-    data: {
+  // Create Sample Course
+  const course = await prisma.course.upsert({
+    where: { id: 'sample-course-1' },
+    update: {},
+    create: {
+      id: 'sample-course-1',
       title: 'Introduction to Web Development',
-      description: 'Learn the fundamentals of web development including HTML, CSS, and JavaScript',
+      description: 'Learn the fundamentals of web development including HTML, CSS, and JavaScript. This comprehensive course covers everything you need to get started building websites.',
       mentorId: mentor.id,
     },
   });
-  console.log('✓ Sample course created');
+  console.log('✅ Course created:', course.title);
 
-  // Create chapters
-  const chapter1 = await prisma.chapter.create({
-    data: {
-      courseId: course.id,
-      title: 'HTML Basics',
-      description: 'Learn the structure and semantics of HTML. Understand tags, attributes, and document structure.',
-      imageUrl: 'https://via.placeholder.com/800x400?text=HTML+Basics',
-      videoUrl: 'https://www.youtube.com/watch?v=qz0aGYrrlhU',
+  // Create Chapters for the course
+  const chapters = [
+    {
+      title: 'Getting Started with HTML',
+      description: 'In this chapter, you will learn the basics of HTML (HyperText Markup Language), the standard language for creating web pages.\n\nTopics covered:\n- What is HTML?\n- HTML document structure\n- Common HTML tags (headings, paragraphs, lists)\n- Creating your first HTML page\n\nBy the end of this chapter, you will be able to create a basic HTML document with proper structure.',
       sequenceOrder: 1,
     },
-  });
-
-  const chapter2 = await prisma.chapter.create({
-    data: {
-      courseId: course.id,
-      title: 'CSS Fundamentals',
-      description: 'Style your web pages with CSS. Learn selectors, properties, and layout techniques.',
-      imageUrl: 'https://via.placeholder.com/800x400?text=CSS+Fundamentals',
-      videoUrl: 'https://www.youtube.com/watch?v=1PnVor36_40',
+    {
+      title: 'Styling with CSS',
+      description: 'CSS (Cascading Style Sheets) is used to style and layout web pages. In this chapter, you will learn how to make your HTML pages look beautiful.\n\nTopics covered:\n- CSS syntax and selectors\n- Colors, fonts, and text styling\n- Box model (margin, padding, border)\n- Layout techniques (Flexbox, Grid)\n\nPractice exercises included to reinforce your learning.',
       sequenceOrder: 2,
     },
-  });
-
-  const chapter3 = await prisma.chapter.create({
-    data: {
-      courseId: course.id,
-      title: 'JavaScript Essentials',
-      description: 'Add interactivity to your websites with JavaScript. Learn variables, functions, and DOM manipulation.',
-      imageUrl: 'https://via.placeholder.com/800x400?text=JavaScript+Essentials',
-      videoUrl: 'https://www.youtube.com/watch?v=W6NZfCO5SIk',
+    {
+      title: 'JavaScript Fundamentals',
+      description: 'JavaScript brings interactivity to your web pages. This chapter covers the core concepts of JavaScript programming.\n\nTopics covered:\n- Variables and data types\n- Functions and scope\n- DOM manipulation\n- Event handling\n- Async programming basics\n\nYou will build interactive features for your web pages.',
       sequenceOrder: 3,
     },
-  });
-  console.log('✓ Chapters created');
+    {
+      title: 'Building Your First Project',
+      description: 'Put everything together! In this final chapter, you will build a complete web project using HTML, CSS, and JavaScript.\n\nProject: Personal Portfolio Website\n- Responsive design\n- Navigation menu\n- Contact form\n- Image gallery\n- Smooth animations\n\nCongratulations on completing the course!',
+      sequenceOrder: 4,
+    },
+  ];
 
-  // Assign course to students
-  await prisma.courseAssignment.create({
-    data: {
+  for (const chapter of chapters) {
+    await prisma.chapter.upsert({
+      where: {
+        courseId_sequenceOrder: {
+          courseId: course.id,
+          sequenceOrder: chapter.sequenceOrder,
+        },
+      },
+      update: {},
+      create: {
+        courseId: course.id,
+        title: chapter.title,
+        description: chapter.description,
+        sequenceOrder: chapter.sequenceOrder,
+      },
+    });
+    console.log(`  📖 Chapter ${chapter.sequenceOrder}: ${chapter.title}`);
+  }
+
+  // Assign students to the course
+  await prisma.courseAssignment.upsert({
+    where: {
+      courseId_studentId: {
+        courseId: course.id,
+        studentId: student1.id,
+      },
+    },
+    update: {},
+    create: {
       courseId: course.id,
       studentId: student1.id,
     },
   });
+  console.log(`✅ ${student1.firstName} assigned to course`);
 
-  await prisma.courseAssignment.create({
-    data: {
+  await prisma.courseAssignment.upsert({
+    where: {
+      courseId_studentId: {
+        courseId: course.id,
+        studentId: student2.id,
+      },
+    },
+    update: {},
+    create: {
       courseId: course.id,
       studentId: student2.id,
     },
   });
-  console.log('✓ Course assigned to students');
+  console.log(`✅ ${student2.firstName} assigned to course`);
 
-  // Add some progress for student1
-  await prisma.progress.create({
-    data: {
-      studentId: student1.id,
-      chapterId: chapter1.id,
-    },
-  });
-  console.log('✓ Sample progress added');
-
-  console.log('\n🎉 Seeding completed successfully!\n');
-  console.log('Test Credentials:');
-  console.log('================');
-  console.log('Admin:');
-  console.log('  Email: admin@lms.com');
-  console.log('  Password: admin123');
-  console.log('\nMentor:');
-  console.log('  Email: mentor@lms.com');
-  console.log('  Password: mentor123');
-  console.log('\nStudent:');
-  console.log('  Email: student1@lms.com or student2@lms.com');
-  console.log('  Password: student123\n');
+  console.log('\n✨ Database seeding completed!\n');
+  console.log('📋 Demo Accounts:');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('Admin:   admin@internlms.com / admin123');
+  console.log('Mentor:  mentor@internlms.com / mentor123');
+  console.log('Pending: pending.mentor@internlms.com / pending123');
+  console.log('Student: student1@internlms.com / student123');
+  console.log('Student: student2@internlms.com / student123');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 }
 
 main()
-  .catch((e) => {
-    console.error('Error seeding database:', e);
-    process.exit(1);
-  })
-  .finally(async () => {
+  .then(async () => {
     await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
   });
