@@ -52,7 +52,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center space-y-8">
             {/* Badge */}
-            <div className="inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 px-4 py-2 rounded-full">
+            <div className="inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 px-4 py-2 rounded-full animate-fade-in-down">
               <Zap className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
                 Powering Modern Internships
@@ -60,7 +60,7 @@ export default function Home() {
             </div>
 
             {/* Main Heading */}
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight animate-fade-in-up delay-100">
               Transform Learning
               <br />
               <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
@@ -69,35 +69,35 @@ export default function Home() {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed animate-fade-in-up delay-200">
               A comprehensive learning management system designed for interns, mentors, and organizations. 
               Sequential learning paths, real-time progress tracking, and automated certifications.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Button size="lg" asChild className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg px-8 py-6 rounded-xl shadow-2xl shadow-blue-500/50 dark:shadow-blue-500/30">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 animate-fade-in-up delay-300">
+              <Button size="lg" asChild className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg px-8 py-6 rounded-xl shadow-2xl shadow-blue-500/50 dark:shadow-blue-500/30 hover-lift">
                 <Link href="/register" className="flex items-center space-x-2">
                   <span>Start Free Trial</span>
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="text-lg px-8 py-6 rounded-xl border-2 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">
+              <Button size="lg" variant="outline" asChild className="text-lg px-8 py-6 rounded-xl border-2 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 hover-lift">
                 <Link href="/login">Watch Demo</Link>
               </Button>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-16">
-              <div className="text-center">
+            <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-16 animate-fade-in delay-400">
+              <div className="text-center hover-scale cursor-default">
                 <div className="text-3xl font-bold text-gray-900 dark:text-white">10K+</div>
                 <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Active Users</div>
               </div>
-              <div className="text-center">
+              <div className="text-center hover-scale cursor-default">
                 <div className="text-3xl font-bold text-gray-900 dark:text-white">500+</div>
                 <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Courses</div>
               </div>
-              <div className="text-center">
+              <div className="text-center hover-scale cursor-default">
                 <div className="text-3xl font-bold text-gray-900 dark:text-white">98%</div>
                 <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Satisfaction</div>
               </div>
@@ -109,7 +109,7 @@ export default function Home() {
       {/* Features Section */}
       <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 animate-fade-in-up">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Everything You Need to Succeed
             </h2>
@@ -120,7 +120,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature 1 */}
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800 hover:shadow-xl transition-shadow duration-300">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800 hover:shadow-xl transition-shadow duration-300 animate-scale-in delay-100 hover-lift">
               <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4">
                 <Code className="w-6 h-6 text-white" />
               </div>
@@ -133,7 +133,7 @@ export default function Home() {
             </div>
 
             {/* Feature 2 */}
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border border-purple-200 dark:border-purple-800 hover:shadow-xl transition-shadow duration-300">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border border-purple-200 dark:border-purple-800 hover:shadow-xl transition-shadow duration-300 animate-scale-in delay-200 hover-lift">
               <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mb-4">
                 <Shield className="w-6 h-6 text-white" />
               </div>
@@ -146,7 +146,7 @@ export default function Home() {
             </div>
 
             {/* Feature 3 */}
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 border border-pink-200 dark:border-pink-800 hover:shadow-xl transition-shadow duration-300">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 border border-pink-200 dark:border-pink-800 hover:shadow-xl transition-shadow duration-300 animate-scale-in delay-300 hover-lift">
               <div className="w-12 h-12 bg-pink-600 rounded-xl flex items-center justify-center mb-4">
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
@@ -159,7 +159,7 @@ export default function Home() {
             </div>
 
             {/* Feature 4 */}
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800 hover:shadow-xl transition-shadow duration-300">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800 hover:shadow-xl transition-shadow duration-300 animate-scale-in delay-400 hover-lift">
               <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mb-4">
                 <Users className="w-6 h-6 text-white" />
               </div>
@@ -172,7 +172,7 @@ export default function Home() {
             </div>
 
             {/* Feature 5 */}
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border border-orange-200 dark:border-orange-800 hover:shadow-xl transition-shadow duration-300">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border border-orange-200 dark:border-orange-800 hover:shadow-xl transition-shadow duration-300 animate-scale-in delay-500 hover-lift">
               <div className="w-12 h-12 bg-orange-600 rounded-xl flex items-center justify-center mb-4">
                 <Award className="w-6 h-6 text-white" />
               </div>
@@ -185,7 +185,7 @@ export default function Home() {
             </div>
 
             {/* Feature 6 */}
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 border border-indigo-200 dark:border-indigo-800 hover:shadow-xl transition-shadow duration-300">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 border border-indigo-200 dark:border-indigo-800 hover:shadow-xl transition-shadow duration-300 animate-scale-in delay-600 hover-lift">
               <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mb-4">
                 <Zap className="w-6 h-6 text-white" />
               </div>
@@ -205,7 +205,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Content */}
-            <div className="space-y-6">
+            <div className="space-y-6 animate-slide-in-left">
               <div className="inline-flex items-center space-x-2 bg-purple-100 dark:bg-purple-900/30 px-4 py-2 rounded-full">
                 <span className="text-sm font-semibold text-purple-600 dark:text-purple-400">
                   Why Choose Us
@@ -256,8 +256,8 @@ export default function Home() {
             </div>
 
             {/* Right Visual */}
-            <div className="relative">
-              <div className="aspect-square rounded-3xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-1">
+            <div className="relative animate-slide-in-right">
+              <div className="aspect-square rounded-3xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-1 hover-scale">
                 <div className="w-full h-full rounded-3xl bg-white dark:bg-gray-900 flex items-center justify-center">
                   <div className="text-center space-y-4">
                     <div className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -280,24 +280,24 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <h2 className="text-4xl sm:text-5xl font-bold text-white">
+          <h2 className="text-4xl sm:text-5xl font-bold text-white animate-fade-in-up">
             Ready to Transform Your Learning Journey?
           </h2>
-          <p className="text-xl text-blue-100">
+          <p className="text-xl text-blue-100 animate-fade-in-up delay-100">
             Join thousands of learners achieving their goals with InternLMS
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" asChild className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6 rounded-xl shadow-2xl">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-200">
+            <Button size="lg" asChild className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6 rounded-xl shadow-2xl hover-lift">
               <Link href="/register" className="flex items-center space-x-2">
                 <span>Start Your Free Trial</span>
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild className="text-lg px-8 py-6 rounded-xl border-2 border-white text-white hover:bg-white/10">
+            <Button size="lg" variant="outline" asChild className="text-lg px-8 py-6 rounded-xl border-2 border-white text-white hover:bg-white/10 hover-lift">
               <Link href="/login">Talk to Sales</Link>
             </Button>
           </div>
-          <p className="text-sm text-blue-100">
+          <p className="text-sm text-blue-100 animate-fade-in delay-300">
             No credit card required • 14-day free trial • Cancel anytime
           </p>
         </div>
