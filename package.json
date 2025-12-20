@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "powershell -ExecutionPolicy Bypass -File ./start-fresh.ps1",
+    "dev:normal": "next dev",
     "dev:backend": "cd backend && npm run start:dev",
-    "dev:all": "concurrently \"npm run dev\" \"npm run dev:backend\"",
+    "dev:all": "concurrently \"npm run dev:normal\" \"npm run dev:backend\"",
     "build": "next build",
     "build:backend": "cd backend && npm run build",
     "start": "next start",
@@ -20,7 +21,8 @@
     "test:e2e": "cd backend && npm run test:e2e",
     "prisma:generate": "cd backend && npx prisma generate",
     "prisma:migrate": "cd backend && npx prisma migrate dev",
-    "prisma:studio": "cd backend && npx prisma studio"
+    "prisma:studio": "cd backend && npx prisma studio",
+    "kill-ports": "powershell -Command \"3000,3001,3002,3003,5173 | ForEach-Object { $p = Get-NetTCPConnection -LocalPort $_ -ErrorAction SilentlyContinue; if($p) { Stop-Process -Id $p.OwningProcess -Force } }\""
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.16",

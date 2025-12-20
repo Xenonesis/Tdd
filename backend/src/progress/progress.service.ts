@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -39,8 +44,10 @@ export class ProgressService {
     }
 
     // Check if previous chapters are completed (sequential progression)
-    const chapterIndex = chapter.course.chapters.findIndex(c => c.id === chapterId);
-    
+    const chapterIndex = chapter.course.chapters.findIndex(
+      (c) => c.id === chapterId,
+    );
+
     if (chapterIndex > 0) {
       const previousChapter = chapter.course.chapters[chapterIndex - 1];
       const previousProgress = await this.prisma.progress.findUnique({
@@ -53,7 +60,9 @@ export class ProgressService {
       });
 
       if (!previousProgress) {
-        throw new BadRequestException('You must complete the previous chapter first');
+        throw new BadRequestException(
+          'You must complete the previous chapter first',
+        );
       }
     }
 
@@ -132,13 +141,14 @@ export class ProgressService {
 
         const totalChapters = assignment.course.chapters.length;
         const completedChapters = progress.length;
-        const completionPercentage = totalChapters > 0 
-          ? Math.round((completedChapters / totalChapters) * 100) 
-          : 0;
+        const completionPercentage =
+          totalChapters > 0
+            ? Math.round((completedChapters / totalChapters) * 100)
+            : 0;
 
-        const completedChapterIds = new Set(progress.map(p => p.chapterId));
+        const completedChapterIds = new Set(progress.map((p) => p.chapterId));
         const nextChapter = assignment.course.chapters.find(
-          chapter => !completedChapterIds.has(chapter.id)
+          (chapter) => !completedChapterIds.has(chapter.id),
         );
 
         return {
@@ -149,18 +159,20 @@ export class ProgressService {
           completedChapters,
           completionPercentage,
           isComplete: completionPercentage === 100,
-          nextChapter: nextChapter ? {
-            id: nextChapter.id,
-            title: nextChapter.title,
-            sequenceOrder: nextChapter.sequenceOrder,
-          } : null,
-          completedChaptersList: progress.map(p => ({
+          nextChapter: nextChapter
+            ? {
+                id: nextChapter.id,
+                title: nextChapter.title,
+                sequenceOrder: nextChapter.sequenceOrder,
+              }
+            : null,
+          completedChaptersList: progress.map((p) => ({
             chapterId: p.chapter.id,
             chapterTitle: p.chapter.title,
             completedAt: p.completedAt,
           })),
         };
-      })
+      }),
     );
 
     return progressData;
@@ -204,20 +216,23 @@ export class ProgressService {
       },
     });
 
-    const completedChapterIds = new Set(progress.map(p => p.chapterId));
+    const completedChapterIds = new Set(progress.map((p) => p.chapterId));
 
     const chaptersWithProgress = course.chapters.map((chapter, index) => ({
       ...chapter,
       isCompleted: completedChapterIds.has(chapter.id),
-      isLocked: index > 0 && !completedChapterIds.has(course.chapters[index - 1].id),
-      completedAt: progress.find(p => p.chapterId === chapter.id)?.completedAt,
+      isLocked:
+        index > 0 && !completedChapterIds.has(course.chapters[index - 1].id),
+      completedAt: progress.find((p) => p.chapterId === chapter.id)
+        ?.completedAt,
     }));
 
     const totalChapters = course.chapters.length;
     const completedChapters = progress.length;
-    const completionPercentage = totalChapters > 0 
-      ? Math.round((completedChapters / totalChapters) * 100) 
-      : 0;
+    const completionPercentage =
+      totalChapters > 0
+        ? Math.round((completedChapters / totalChapters) * 100)
+        : 0;
 
     return {
       courseId: course.id,
@@ -274,9 +289,10 @@ export class ProgressService {
 
         const totalChapters = assignment.course.chapters.length;
         const completedChapters = progress.length;
-        const completionPercentage = totalChapters > 0 
-          ? Math.round((completedChapters / totalChapters) * 100) 
-          : 0;
+        const completionPercentage =
+          totalChapters > 0
+            ? Math.round((completedChapters / totalChapters) * 100)
+            : 0;
 
         return {
           student: assignment.student,
@@ -288,7 +304,7 @@ export class ProgressService {
           completionPercentage,
           isComplete: completionPercentage === 100,
         };
-      })
+      }),
     );
 
     return studentsProgress;

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useAuth } from '@/lib/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@/components/ui/Button';
 import { Alert } from '@/components/ui/Alert';
 import { ModeToggle } from '@/components/mode-toggle';
 import { UserPlus, Mail, Lock, User, Check, ArrowRight, Sparkles, Shield, BookOpen, Award } from 'lucide-react';
@@ -41,8 +40,9 @@ export default function RegisterPage() {
     try {
       await register(name, email, password, role);
       router.push('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -130,7 +130,7 @@ export default function RegisterPage() {
                 </div>
                 <div>
                   <p className="text-gray-700 dark:text-gray-300 text-sm italic mb-2">
-                    "InternLMS transformed my career. The structured learning path and mentor support helped me land my dream job!"
+                    &quot;InternLMS transformed my career. The structured learning path and mentor support helped me land my dream job!&quot;
                   </p>
                   <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold">
                     - Jane Doe, Software Engineer

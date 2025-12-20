@@ -26,7 +26,10 @@ export class CertificatesController {
     @Request() req: any,
     @Param('courseId') courseId: string,
   ) {
-    return this.certificatesService.generateCertificate(req.user.userId, courseId);
+    return this.certificatesService.generateCertificate(
+      req.user.userId,
+      courseId,
+    );
   }
 
   // Get student's certificates
@@ -43,10 +46,14 @@ export class CertificatesController {
     @Param('id') certificateId: string,
     @Res() res: Response,
   ) {
-    const certificate = await this.certificatesService.getCertificateById(certificateId);
-    
+    const certificate =
+      await this.certificatesService.getCertificateById(certificateId);
+
     // Verify access (student can only download their own certificates)
-    if (req.user.role === 'STUDENT' && certificate.studentId !== req.user.userId) {
+    if (
+      req.user.role === 'STUDENT' &&
+      certificate.studentId !== req.user.userId
+    ) {
       return res.status(403).json({ message: 'Forbidden' });
     }
 

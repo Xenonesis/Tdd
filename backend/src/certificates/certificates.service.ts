@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import PDFDocument from 'pdfkit';
 import * as fs from 'fs';
@@ -53,7 +57,9 @@ export class CertificatesService {
     });
 
     if (progress.length !== course.chapters.length) {
-      throw new BadRequestException('Course must be 100% complete to generate certificate');
+      throw new BadRequestException(
+        'Course must be 100% complete to generate certificate',
+      );
     }
 
     // Check if certificate already exists
@@ -107,7 +113,7 @@ export class CertificatesService {
     course: any,
   ): Promise<string> {
     const uploadsDir = path.join(process.cwd(), 'uploads', 'certificates');
-    
+
     // Create uploads directory if it doesn't exist
     if (!fs.existsSync(uploadsDir)) {
       fs.mkdirSync(uploadsDir, { recursive: true });
@@ -219,7 +225,7 @@ export class CertificatesService {
   async getCertificateById(certificateId: string) {
     const certificate = await this.prisma.certificate.findUnique({
       where: { id: certificateId },
-      include: { 
+      include: {
         student: {
           select: {
             id: true,

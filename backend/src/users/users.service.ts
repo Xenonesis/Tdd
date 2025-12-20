@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -8,7 +12,7 @@ export class UsersService {
   // Get all users (Admin only)
   async getAllUsers(role?: string) {
     const where = role ? { role: role as any } : {};
-    
+
     return this.prisma.user.findMany({
       where,
       select: {

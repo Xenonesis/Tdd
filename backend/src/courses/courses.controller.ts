@@ -22,8 +22,15 @@ export class CoursesController {
   // Create a new course (Mentor only)
   @Post()
   @Roles('MENTOR')
-  async createCourse(@Request() req: any, @Body() body: { title: string; description: string }) {
-    return this.coursesService.createCourse(req.user.userId, body.title, body.description);
+  async createCourse(
+    @Request() req: any,
+    @Body() body: { title: string; description: string },
+  ) {
+    return this.coursesService.createCourse(
+      req.user.userId,
+      body.title,
+      body.description,
+    );
   }
 
   // Get courses based on user role
@@ -50,7 +57,11 @@ export class CoursesController {
   // Get a specific course
   @Get(':id')
   async getCourseById(@Request() req: any, @Param('id') courseId: string) {
-    return this.coursesService.getCourseById(courseId, req.user.userId, req.user.role);
+    return this.coursesService.getCourseById(
+      courseId,
+      req.user.userId,
+      req.user.role,
+    );
   }
 
   // Update a course (Mentor only)
@@ -61,7 +72,12 @@ export class CoursesController {
     @Param('id') courseId: string,
     @Body() body: { title?: string; description?: string },
   ) {
-    return this.coursesService.updateCourse(courseId, req.user.userId, body.title, body.description);
+    return this.coursesService.updateCourse(
+      courseId,
+      req.user.userId,
+      body.title,
+      body.description,
+    );
   }
 
   // Delete a course (Mentor only)
@@ -77,7 +93,13 @@ export class CoursesController {
   async addChapter(
     @Request() req: any,
     @Param('id') courseId: string,
-    @Body() body: { title: string; description: string; imageUrl?: string; videoUrl?: string },
+    @Body()
+    body: {
+      title: string;
+      description: string;
+      imageUrl?: string;
+      videoUrl?: string;
+    },
   ) {
     return this.coursesService.addChapter(
       courseId,
@@ -92,7 +114,11 @@ export class CoursesController {
   // Get chapters for a course
   @Get(':id/chapters')
   async getCourseChapters(@Request() req: any, @Param('id') courseId: string) {
-    return this.coursesService.getCourseChapters(courseId, req.user.userId, req.user.role);
+    return this.coursesService.getCourseChapters(
+      courseId,
+      req.user.userId,
+      req.user.role,
+    );
   }
 
   // Assign course to students (Mentor only)
@@ -103,6 +129,10 @@ export class CoursesController {
     @Param('id') courseId: string,
     @Body() body: { studentIds: string[] },
   ) {
-    return this.coursesService.assignCourse(courseId, req.user.userId, body.studentIds);
+    return this.coursesService.assignCourse(
+      courseId,
+      req.user.userId,
+      body.studentIds,
+    );
   }
 }

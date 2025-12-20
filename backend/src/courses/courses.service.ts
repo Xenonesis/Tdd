@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -98,9 +103,10 @@ export class CoursesService {
 
         const totalChapters = assignment.course.chapters.length;
         const completedChapters = progress.length;
-        const completionPercentage = totalChapters > 0 
-          ? Math.round((completedChapters / totalChapters) * 100) 
-          : 0;
+        const completionPercentage =
+          totalChapters > 0
+            ? Math.round((completedChapters / totalChapters) * 100)
+            : 0;
 
         return {
           ...assignment.course,
@@ -109,7 +115,7 @@ export class CoursesService {
           totalChapters,
           completionPercentage,
         };
-      })
+      }),
     );
 
     return coursesWithProgress;
@@ -177,7 +183,7 @@ export class CoursesService {
 
       return {
         ...course,
-        progress: progress.map(p => p.chapterId),
+        progress: progress.map((p) => p.chapterId),
       };
     }
 
@@ -189,7 +195,12 @@ export class CoursesService {
   }
 
   // Update course (Mentor only)
-  async updateCourse(courseId: string, mentorId: string, title?: string, description?: string) {
+  async updateCourse(
+    courseId: string,
+    mentorId: string,
+    title?: string,
+    description?: string,
+  ) {
     const course = await this.prisma.course.findUnique({
       where: { id: courseId },
     });
@@ -254,12 +265,13 @@ export class CoursesService {
     }
 
     if (course.mentorId !== mentorId) {
-      throw new ForbiddenException('You can only add chapters to courses you created');
+      throw new ForbiddenException(
+        'You can only add chapters to courses you created',
+      );
     }
 
-    const nextSequenceOrder = course.chapters.length > 0 
-      ? course.chapters[0].sequenceOrder + 1 
-      : 1;
+    const nextSequenceOrder =
+      course.chapters.length > 0 ? course.chapters[0].sequenceOrder + 1 : 1;
 
     return this.prisma.chapter.create({
       data: {
@@ -301,7 +313,9 @@ export class CoursesService {
 
     // Check access for mentors
     if (userRole === 'MENTOR' && course.mentorId !== userId) {
-      throw new ForbiddenException('You can only access chapters from courses you created');
+      throw new ForbiddenException(
+        'You can only access chapters from courses you created',
+      );
     }
 
     const chapters = await this.prisma.chapter.findMany({
@@ -315,12 +329,12 @@ export class CoursesService {
         where: {
           studentId: userId,
           chapterId: {
-            in: chapters.map(c => c.id),
+            in: chapters.map((c) => c.id),
           },
         },
       });
 
-      const completedChapterIds = new Set(progress.map(p => p.chapterId));
+      const completedChapterIds = new Set(progress.map((p) => p.chapterId));
 
       return chapters.map((chapter, index) => ({
         ...chapter,
@@ -384,7 +398,7 @@ export class CoursesService {
             },
           },
         });
-      })
+      }),
     );
 
     return assignments;

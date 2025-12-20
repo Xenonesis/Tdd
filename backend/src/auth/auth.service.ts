@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
@@ -51,9 +55,10 @@ export class AuthService {
     return {
       user,
       accessToken: token,
-      message: registerDto.role === 'MENTOR' 
-        ? 'Mentor account created. Waiting for admin approval.' 
-        : 'Account created successfully.',
+      message:
+        registerDto.role === 'MENTOR'
+          ? 'Mentor account created. Waiting for admin approval.'
+          : 'Account created successfully.',
     };
   }
 
@@ -70,7 +75,10 @@ export class AuthService {
       throw new UnauthorizedException('Account is deactivated');
     }
 
-    const isPasswordValid = await bcrypt.compare(loginDto.password, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');

@@ -10,7 +10,7 @@ function getPool(): Pool {
   if (!globalPool) {
     const connectionString = process.env.DATABASE_URL!;
     const url = new URL(connectionString);
-    
+
     globalPool = new Pool({
       host: url.hostname,
       port: parseInt(url.port),
@@ -27,13 +27,16 @@ function getPool(): Pool {
 }
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+export class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
+{
   constructor() {
     // Initialize PrismaClient for PostgreSQL with adapter
     // Use singleton pool to avoid multiple connection pools
     const pool = getPool();
     const adapter = new PrismaPg(pool);
-    
+
     super({
       adapter,
     });
