@@ -1,8 +1,30 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 import * as bcrypt from 'bcrypt';
+import * as dotenv from 'dotenv';
 
-// Initialize Prisma for PostgreSQL
-const prisma = new PrismaClient();
+dotenv.config();
+
+// Initialize Prisma for PostgreSQL with adapter
+// Parse the connection string to properly handle URL-encoded passwords
+const connectionString = process.env.DATABASE_URL!;
+const url = new URL(connectionString);
+
+const pool = new Pool({
+  host: url.hostname,
+  port: parseInt(url.port),
+  user: url.username,
+  password: decodeURIComponent(url.password),
+  database: url.pathname.slice(1),
+  ssl: { rejectUnauthorized: false },
+});
+
+const adapter = new PrismaPg(pool);
+
+const prisma = new PrismaClient({
+  adapter,
+});
 
 // Define Role enum matching Prisma schema
 type Role = 'STUDENT' | 'MENTOR' | 'ADMIN';
