@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Alert } from '@/components/ui/Alert';
+import { ModeToggle } from '@/components/mode-toggle';
+import { LogIn, Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -32,124 +34,217 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen gradient-mesh flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 transition-colors duration-300">
       {/* Header */}
-      <header className="w-full py-6 px-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-lg">
-              <span className="text-white text-xl">📚</span>
-            </div>
-            <span className="text-2xl font-bold text-gradient">InternLMS</span>
-          </Link>
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-gray-950/70 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link href="/" className="flex items-center space-x-3 group">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-200">
+                <span className="text-white font-bold text-xl">IL</span>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                InternLMS
+              </span>
+            </Link>
+            <ModeToggle />
+          </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md">
-          {/* Card */}
-          <div className="glass-card rounded-2xl p-8 shadow-2xl animate-fadeInUp">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                </svg>
+      <main className="flex items-center justify-center min-h-screen px-4 pt-16">
+        <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 items-center py-12">
+          {/* Left Side - Marketing Content */}
+          <div className="hidden lg:block space-y-8 animate-slide-in-left">
+            <div className="space-y-4">
+              <div className="inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 px-4 py-2 rounded-full">
+                <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                  Welcome Back
+                </span>
               </div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Welcome back
+              <h1 className="text-5xl font-extrabold text-gray-900 dark:text-white leading-tight">
+                Continue Your
+                <br />
+                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  Learning Journey
+                </span>
               </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
-                Sign in to continue your learning journey
+              <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
+                Access your courses, track your progress, and achieve your goals with InternLMS.
               </p>
             </div>
 
-            {/* Error Alert */}
-            {error && (
-              <div className="mb-6">
-                <Alert variant="error" onClose={() => setError('')}>
-                  {error}
-                </Alert>
+            {/* Features */}
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Personalized Learning</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">Track your progress and continue where you left off</p>
+                </div>
               </div>
-            )}
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <Input
-                label="Email Address"
-                type="email"
-                id="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                leftIcon={
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              <div className="flex items-start space-x-3">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                }
-              />
-
-              <Input
-                label="Password"
-                type="password"
-                id="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                leftIcon={
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Expert Mentors</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">Get guidance from experienced professionals</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                }
-              />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Verified Certificates</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">Earn credentials that matter in your career</p>
+                </div>
+              </div>
+            </div>
 
-              <Button
-                type="submit"
-                loading={loading}
-                fullWidth
-                size="lg"
-              >
-                Sign In
-              </Button>
-            </form>
-
-            {/* Footer */}
-            <div className="mt-8 text-center">
-              <p className="text-gray-600 dark:text-gray-400">
-                Don't have an account?{' '}
-                <Link
-                  href="/register"
-                  className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors"
-                >
-                  Create account
-                </Link>
-              </p>
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-6 pt-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">10K+</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Students</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">500+</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Courses</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">98%</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Success</div>
+              </div>
             </div>
           </div>
 
-          {/* Demo Accounts */}
-          <div className="mt-8 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur border border-gray-200 dark:border-gray-700">
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 text-center">
-              Demo Accounts
-            </p>
-            <div className="grid grid-cols-3 gap-2 text-xs">
-              <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-center">
-                <p className="font-semibold text-emerald-700 dark:text-emerald-300">Student</p>
-                <p className="text-emerald-600 dark:text-emerald-400">student@test.com</p>
+          {/* Right Side - Login Form */}
+          <div className="w-full animate-scale-in delay-200">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-8 sm:p-12 border border-gray-200 dark:border-gray-800">
+              {/* Icon */}
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 animate-fade-in">
+                <LogIn className="w-8 h-8 text-white" />
               </div>
-              <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 text-center">
-                <p className="font-semibold text-indigo-700 dark:text-indigo-300">Mentor</p>
-                <p className="text-indigo-600 dark:text-indigo-400">mentor@test.com</p>
+
+              {/* Title */}
+              <div className="text-center mb-8 animate-fade-in-up delay-100">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                  Welcome Back
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Sign in to your account to continue
+                </p>
               </div>
-              <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 text-center">
-                <p className="font-semibold text-amber-700 dark:text-amber-300">Admin</p>
-                <p className="text-amber-600 dark:text-amber-400">admin@test.com</p>
+
+              {/* Error Alert */}
+              {error && (
+                <div className="mb-6 animate-fade-in">
+                  <Alert variant="error" onClose={() => setError('')}>
+                    {error}
+                  </Alert>
+                </div>
+              )}
+
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in-up delay-200">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Mail className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="email"
+                      id="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="block w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      placeholder="you@example.com"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="password" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Lock className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="password"
+                      id="password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="block w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full flex items-center justify-center space-x-2 py-3 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span>{loading ? 'Signing In...' : 'Sign In'}</span>
+                  {!loading && <ArrowRight className="w-5 h-5" />}
+                </button>
+              </form>
+
+              {/* Footer */}
+              <div className="mt-8 text-center animate-fade-in delay-300">
+                <p className="text-gray-600 dark:text-gray-400">
+                  Don't have an account?{' '}
+                  <Link
+                    href="/register"
+                    className="font-semibold text-blue-600 dark:text-blue-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                  >
+                    Create account
+                  </Link>
+                </p>
+              </div>
+
+              {/* Demo Accounts */}
+              <div className="mt-8 p-4 rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/10 dark:to-purple-900/10 border border-blue-200 dark:border-blue-800/30 animate-fade-in delay-400">
+                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 text-center flex items-center justify-center space-x-2">
+                  <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <span>Demo Accounts</span>
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  <div className="p-3 rounded-lg bg-white dark:bg-gray-800 border border-green-200 dark:border-green-800/30 text-center hover-scale">
+                    <p className="font-semibold text-green-700 dark:text-green-300 mb-1">👨‍🎓 Student</p>
+                    <p className="text-green-600 dark:text-green-400">student@test.com</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-800/30 text-center hover-scale">
+                    <p className="font-semibold text-blue-700 dark:text-blue-300 mb-1">👨‍🏫 Mentor</p>
+                    <p className="text-blue-600 dark:text-blue-400">mentor@test.com</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-white dark:bg-gray-800 border border-purple-200 dark:border-purple-800/30 text-center hover-scale">
+                    <p className="font-semibold text-purple-700 dark:text-purple-300 mb-1">🛡️ Admin</p>
+                    <p className="text-purple-600 dark:text-purple-400">admin@test.com</p>
+                  </div>
+                </div>
+                <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-3">Password: password123</p>
               </div>
             </div>
-            <p className="text-xs text-center text-gray-500 mt-2">Password: password123</p>
           </div>
         </div>
       </main>
