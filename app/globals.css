@@ -219,7 +219,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior moved to data attribute for Next.js compatibility */
 }
 
 body {
