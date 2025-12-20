@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
+// Initialize Prisma for PostgreSQL
 const prisma = new PrismaClient();
 
 // Define Role enum matching Prisma schema

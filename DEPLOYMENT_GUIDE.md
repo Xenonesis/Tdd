@@ -25,19 +25,30 @@ cd ..
 
 ### Step 2: Database Setup
 
-The application uses SQLite by default for easy setup. No external database needed!
+The application uses PostgreSQL with Supabase for production-ready deployment.
+
+#### Option A: Supabase (Recommended for Production)
+
+1. Create a Supabase project at https://supabase.com
+2. Get your connection strings (Transaction & Direct URLs)
+3. Update `backend/.env` with your Supabase credentials
+4. Run migrations:
 
 ```bash
-# Generate Prisma client
 cd backend
 npm run prisma:generate
-
-# Run migrations
 npm run prisma:migrate
-
-# Seed sample data
 npm run prisma:seed
 ```
+
+See `backend/SUPABASE_SETUP.md` for detailed instructions.
+
+#### Option B: Local SQLite (Development Only)
+
+For quick local testing, you can use SQLite:
+1. Change `backend/prisma/schema.prisma` provider to `"sqlite"`
+2. Set `DATABASE_URL="file:./dev.db"` in `backend/.env`
+3. Run migrations as above
 
 ### Step 3: Environment Configuration
 
@@ -46,9 +57,11 @@ npm run prisma:seed
 NEXT_PUBLIC_API_URL=http://localhost:3001/api
 ```
 
-**Backend** - The `backend/.env` file should already exist with:
+**Backend** - Update `backend/.env` with your Supabase credentials:
 ```env
-DATABASE_URL="file:./dev.db"
+# Supabase PostgreSQL (see backend/SUPABASE_SETUP.md)
+DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
 JWT_SECRET="your-super-secret-jwt-key-change-this-in-production"
 PORT=3001
 FRONTEND_URL=http://localhost:3000
@@ -206,7 +219,7 @@ npm run test:e2e
 ### Backend
 - **NestJS** - Node.js framework
 - **Prisma** - ORM and database toolkit
-- **SQLite** - Database (easily switchable to PostgreSQL)
+- **PostgreSQL (Supabase)** - Production database with connection pooling
 - **JWT** - Authentication
 - **PDFKit** - PDF generation
 - **bcrypt** - Password hashing

@@ -14,7 +14,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import type { Response } from 'express';
 import * as path from 'path';
 
-@Controller('api/certificates')
+@Controller('certificates')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class CertificatesController {
   constructor(private certificatesService: CertificatesService) {}

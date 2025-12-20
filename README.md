@@ -653,21 +653,31 @@ cd backend
 npm install
 cd ..
 
-# 4️⃣ Setup Database
+# 4️⃣ Setup Database (Supabase PostgreSQL)
+# See backend/SUPABASE_SETUP.md for detailed instructions
+# 1. Create Supabase project at https://supabase.com
+# 2. Get your connection strings (Transaction & Direct URLs)
+# 3. Update backend/.env with your Supabase credentials
+
 cd backend
+# Update .env with:
+# DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@[HOST]:6543/postgres?pgbouncer=true"
+# DIRECT_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@[HOST]:5432/postgres"
+
 npx prisma generate
 npx prisma migrate dev --name init
-npx ts-node prisma/seed.ts
+npx prisma db seed
 cd ..
 
 # 5️⃣ Configure Environment Variables
 # Create .env.local in root directory
-echo "NEXT_PUBLIC_API_URL=http://localhost:3001/api" > .env.local
+echo "NEXT_PUBLIC_API_URL=http://localhost:3002/api" > .env.local
 
-# Backend .env already exists with default config
-# DATABASE_URL="file:./dev.db"
+# Backend .env should have:
+# DATABASE_URL="postgresql://..." (Supabase Transaction URL)
+# DIRECT_URL="postgresql://..." (Supabase Direct URL)
 # JWT_SECRET="your-super-secret-jwt-key"
-# PORT=3001
+# PORT=3002
 # FRONTEND_URL=http://localhost:3000
 
 # 6️⃣ Start Development Servers
@@ -675,7 +685,7 @@ npm run dev:all
 
 # 🎉 Application running at:
 # Frontend: http://localhost:3000
-# Backend API: http://localhost:3001/api
+# Backend API: http://localhost:3002/api
 ```
 
 ### 🔑 Test Credentials
@@ -2152,7 +2162,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
   // Can be changed to "postgresql" for production
 }
 
@@ -3030,7 +3042,7 @@ server {
 ### 🔒 Production Security Checklist
 
 - [ ] Change JWT_SECRET to strong random string
-- [ ] Use PostgreSQL instead of SQLite
+- [x] Use PostgreSQL (Supabase) for production deployment
 - [ ] Enable CORS only for trusted domains
 - [ ] Use HTTPS/SSL certificates
 - [ ] Set secure environment variables
