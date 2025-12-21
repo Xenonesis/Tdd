@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Alert } from '@/components/ui/Alert';
 import { ModeToggle } from '@/components/mode-toggle';
-import { UserPlus, Mail, Lock, User, Check, ArrowRight, Sparkles, Shield, BookOpen, Award } from 'lucide-react';
+import { UserPlus, Mail, Lock, User, Check, ArrowRight, Sparkles, Shield, BookOpen, Award, GraduationCap, UserCheck } from 'lucide-react';
 
 type UserRole = 'STUDENT' | 'MENTOR' | 'ADMIN';
 
@@ -268,7 +268,9 @@ export default function RegisterPage() {
                           : 'border-gray-300 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700'
                       }`}
                     >
-                      <div className="text-2xl mb-2">👨‍🎓</div>
+                      <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-2 mx-auto">
+                        <GraduationCap className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      </div>
                       <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">Student</div>
                     </button>
                     <button
@@ -280,7 +282,9 @@ export default function RegisterPage() {
                           : 'border-gray-300 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700'
                       }`}
                     >
-                      <div className="text-2xl mb-2">👨‍🏫</div>
+                      <div className="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-2 mx-auto">
+                        <UserCheck className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                      </div>
                       <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">Mentor</div>
                     </button>
                     <button
@@ -292,7 +296,9 @@ export default function RegisterPage() {
                           : 'border-gray-300 dark:border-gray-700 hover:border-pink-300 dark:hover:border-pink-700'
                       }`}
                     >
-                      <div className="text-2xl mb-2">🛡️</div>
+                      <div className="w-10 h-10 rounded-lg bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center mb-2 mx-auto">
+                        <Shield className="w-6 h-6 text-pink-600 dark:text-pink-400" />
+                      </div>
                       <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">Admin</div>
                     </button>
                   </div>
@@ -325,9 +331,9 @@ export default function RegisterPage() {
               <div className="mt-6 p-4 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-800/50 border border-gray-200 dark:border-gray-700 animate-fade-in delay-400">
                 <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">Role Descriptions:</p>
                 <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400">
-                  <p><span className="font-semibold text-blue-600 dark:text-blue-400">👨‍🎓 Student:</span> Access courses, track progress, earn certificates</p>
-                  <p><span className="font-semibold text-purple-600 dark:text-purple-400">👨‍🏫 Mentor:</span> Create courses, manage students, provide feedback</p>
-                  <p><span className="font-semibold text-pink-600 dark:text-pink-400">🛡️ Admin:</span> Full system access, manage users and content</p>
+                  <p><span className="font-semibold text-blue-600 dark:text-blue-400 inline-flex items-center gap-1"><GraduationCap className="w-4 h-4" /> Student:</span> Access courses, track progress, earn certificates</p>
+                  <p><span className="font-semibold text-purple-600 dark:text-purple-400 inline-flex items-center gap-1"><UserCheck className="w-4 h-4" /> Mentor:</span> Create courses, manage students, provide feedback</p>
+                  <p><span className="font-semibold text-pink-600 dark:text-pink-400 inline-flex items-center gap-1"><Shield className="w-4 h-4" /> Admin:</span> Full system access, manage users and content</p>
                 </div>
               </div>
             </div>

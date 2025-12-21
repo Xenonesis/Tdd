@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Alert } from '@/components/ui/Alert';
 import { ModeToggle } from '@/components/mode-toggle';
-import { LogIn, Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import { LogIn, Mail, Lock, ArrowRight, Sparkles, GraduationCap, UserCheck, Shield } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -229,15 +229,15 @@ export default function LoginPage() {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                   <div className="p-3 rounded-lg bg-white dark:bg-gray-800 border border-green-200 dark:border-green-800/30 text-center hover-scale">
-                    <p className="font-semibold text-green-700 dark:text-green-300 mb-1">👨‍🎓 Student</p>
+                    <p className="font-semibold text-green-700 dark:text-green-300 mb-1 flex items-center justify-center gap-2"><GraduationCap className="w-4 h-4" /> Student</p>
                     <p className="text-green-600 dark:text-green-400">student@test.com</p>
                   </div>
                   <div className="p-3 rounded-lg bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-800/30 text-center hover-scale">
-                    <p className="font-semibold text-blue-700 dark:text-blue-300 mb-1">👨‍🏫 Mentor</p>
+                    <p className="font-semibold text-blue-700 dark:text-blue-300 mb-1 flex items-center justify-center gap-2"><UserCheck className="w-4 h-4" /> Mentor</p>
                     <p className="text-blue-600 dark:text-blue-400">mentor@test.com</p>
                   </div>
                   <div className="p-3 rounded-lg bg-white dark:bg-gray-800 border border-purple-200 dark:border-purple-800/30 text-center hover-scale">
-                    <p className="font-semibold text-purple-700 dark:text-purple-300 mb-1">🛡️ Admin</p>
+                    <p className="font-semibold text-purple-700 dark:text-purple-300 mb-1 flex items-center justify-center gap-2"><Shield className="w-4 h-4" /> Admin</p>
                     <p className="text-purple-600 dark:text-purple-400">admin@test.com</p>
                   </div>
                 </div>

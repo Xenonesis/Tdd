@@ -11,7 +11,7 @@ import { Input, Textarea } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
 import { LoadingScreen } from '@/components/ui/Loading';
 import { Alert } from '@/components/ui/Alert';
-import { Plus, UserPlus, BookOpen, Users } from 'lucide-react';
+import { Plus, UserPlus, BookOpen, Users, Image, Video } from 'lucide-react';
 
 export default function MentorCourseDetailPage() {
   return (
@@ -204,12 +204,12 @@ function MentorCourseDetailContent() {
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {chapter.imageUrl && (
                         <span className="w-6 h-6 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs" title="Has image">
-                          🖼️
+                          <Image className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                         </span>
                       )}
                       {chapter.videoUrl && (
                         <span className="w-6 h-6 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs" title="Has video">
-                          🎥
+                          <Video className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                         </span>
                       )}
                     </div>

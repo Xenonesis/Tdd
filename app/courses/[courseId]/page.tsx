@@ -11,7 +11,7 @@ import { ProgressBar, CircularProgress } from '@/components/ui/ProgressBar';
 import { LoadingScreen } from '@/components/ui/Loading';
 import { Alert } from '@/components/ui/Alert';
 import { Badge } from '@/components/ui/Badge';
-import { GraduationCap, Check, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
+import { GraduationCap, Check, BookOpen, ChevronLeft, ChevronRight, PartyPopper, Video } from 'lucide-react';
 
 export default function CourseViewerPage() {
   return (
@@ -129,7 +129,7 @@ function CourseViewerContent() {
         {/* Course Completion Banner */}
         {progress?.isComplete && (
           <div className="mb-6">
-            <Alert variant="success" title="🎉 Congratulations! Course Completed!">
+            <Alert variant="success" title={<span className="flex items-center gap-2"><PartyPopper className="w-5 h-5" /> Congratulations! Course Completed!</span>}>
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                 <span>You've completed all chapters. You can now generate your certificate.</span>
                 <Button
@@ -244,7 +244,7 @@ function CourseViewerContent() {
                     <div className="my-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                          <span className="text-2xl">🎥</span>
+                          <Video className="w-8 h-8 text-white" />
                         </div>
                         <div>
                           <p className="font-semibold text-gray-900 dark:text-white">Video Content</p>
