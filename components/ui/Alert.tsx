@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 
 interface AlertProps {
   variant?: 'info' | 'success' | 'warning' | 'error';
-  title?: string;
+  title?: ReactNode;
   children: ReactNode;
   onClose?: () => void;
   icon?: ReactNode;

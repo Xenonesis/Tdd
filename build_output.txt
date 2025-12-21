@@ -1,0 +1,24 @@
+
+> tdd@0.1.0 build
+> next build
+
+   Ôû▓ Next.js 16.0.10 (Turbopack)
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ Ô£ô Compiled successfully in 2.6s
+   Running TypeScript ...
+Failed to compile.
+
+./backend/src/app.controller.ts:10:3
+Type error: Unable to resolve signature of method decorator when called as an expression.
+  The runtime will invoke the decorator with 2 arguments, but the decorator expects 3.
+
+   8 |
+   9 |   @Public()
+> 10 |   @Get()
+     |   ^
+  11 |   getHello(): string {
+  12 |     return this.appService.getHello();
+  13 |   }
+Next.js build worker exited with code: 1 and signal: null
