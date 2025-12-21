@@ -35,7 +35,7 @@ function MentorCoursesContent() {
 
   const fetchCourses = async () => {
     try {
-      const response = await axios.get('/api/courses/my');
+      const response = await axios.get('/courses/my');
       setCourses(response.data);
     } catch (error) {
       console.error('Error fetching courses:', error);
@@ -48,7 +48,7 @@ function MentorCoursesContent() {
     e.preventDefault();
     setCreating(true);
     try {
-      await axios.post('/api/courses', newCourse);
+      await axios.post('/courses', newCourse);
       setShowCreateModal(false);
       setNewCourse({ title: '', description: '' });
       fetchCourses();

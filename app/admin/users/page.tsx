@@ -34,7 +34,7 @@ function AdminUsersContent() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('/api/users');
+      const response = await axios.get('/users');
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -45,7 +45,7 @@ function AdminUsersContent() {
 
   const fetchPendingMentors = async () => {
     try {
-      const response = await axios.get('/api/users/pending-mentors');
+      const response = await axios.get('/users/pending-mentors');
       setPendingMentors(response.data);
     } catch (error) {
       console.error('Error fetching pending mentors:', error);
@@ -55,7 +55,7 @@ function AdminUsersContent() {
   const approveMentor = async (userId: string) => {
     setProcessing(true);
     try {
-      await axios.put(`/api/users/${userId}/approve-mentor`);
+      await axios.put(`/users/${userId}/approve-mentor`);
       fetchUsers();
       fetchPendingMentors();
     } catch (error: any) {
@@ -85,7 +85,7 @@ function AdminUsersContent() {
   const deleteUser = async (userId: string) => {
     setProcessing(true);
     try {
-      await axios.delete(`/api/users/${userId}`);
+      await axios.delete(`/users/${userId}`);
       fetchUsers();
       fetchPendingMentors();
     } catch (error: any) {

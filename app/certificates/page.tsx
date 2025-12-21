@@ -31,7 +31,7 @@ function CertificatesContent() {
 
   const fetchCertificates = async () => {
     try {
-      const response = await axios.get('/api/certificates/my-certificates');
+      const response = await axios.get('/certificates/my-certificates');
       setCertificates(response.data);
     } catch (error) {
       console.error('Error fetching certificates:', error);
@@ -43,7 +43,7 @@ function CertificatesContent() {
   const downloadCertificate = async (certificateId: string, courseTitle: string) => {
     setDownloading(certificateId);
     try {
-      const response = await axios.get(`/api/certificates/${certificateId}/download`, {
+      const response = await axios.get(`/certificates/${certificateId}/download`, {
         responseType: 'blob',
       });
       

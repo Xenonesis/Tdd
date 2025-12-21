@@ -28,7 +28,7 @@ function CoursesContent() {
 
   const fetchCourses = async () => {
     try {
-      const response = await axios.get('/api/courses/my');
+      const response = await axios.get('/courses/my');
       setCourses(response.data);
     } catch (error) {
       console.error('Error fetching courses:', error);

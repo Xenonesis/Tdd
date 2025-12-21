@@ -47,10 +47,10 @@ function MentorCourseDetailContent() {
   const fetchCourseData = async () => {
     try {
       const [courseRes, chaptersRes, studentsRes, allStudentsRes] = await Promise.all([
-        axios.get(`/api/courses/${params.courseId}`),
-        axios.get(`/api/courses/${params.courseId}/chapters`),
-        axios.get(`/api/courses/${params.courseId}/students`),
-        axios.get('/api/users?role=STUDENT'),
+        axios.get(`/courses/${params.courseId}`),
+        axios.get(`/courses/${params.courseId}/chapters`),
+        axios.get(`/courses/${params.courseId}/students`),
+        axios.get('/users?role=STUDENT'),
       ]);
 
       setCourse(courseRes.data);
@@ -71,7 +71,7 @@ function MentorCourseDetailContent() {
     e.preventDefault();
     setCreating(true);
     try {
-      await axios.post(`/api/courses/${params.courseId}/chapters`, {
+      await axios.post(`/courses/${params.courseId}/chapters`, {
         ...newChapter,
         order: chapters.length + 1,
       });
@@ -91,7 +91,7 @@ function MentorCourseDetailContent() {
     
     setAssigning(true);
     try {
-      await axios.post(`/api/courses/${params.courseId}/assign`, {
+      await axios.post(`/courses/${params.courseId}/assign`, {
         studentId: selectedStudentId,
       });
       setShowAssignStudentModal(false);
@@ -108,7 +108,7 @@ function MentorCourseDetailContent() {
     if (!confirm('Are you sure you want to remove this student from the course?')) return;
     
     try {
-      await axios.delete(`/api/courses/${params.courseId}/students/${studentId}`);
+      await axios.delete(`/courses/${params.courseId}/students/${studentId}`);
       fetchCourseData();
     } catch (error: any) {
       alert(error.response?.data?.message || 'Error removing student');

@@ -27,7 +27,7 @@ function MentorStudentsContent() {
 
   const fetchStudentsProgress = async () => {
     try {
-      const response = await axios.get('/api/progress/students');
+      const response = await axios.get('/progress/students');
       setStudentsProgress(response.data);
     } catch (error) {
       console.error('Error fetching students progress:', error);

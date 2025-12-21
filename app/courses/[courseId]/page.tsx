@@ -40,9 +40,9 @@ function CourseViewerContent() {
   const fetchCourseData = async () => {
     try {
       const [courseRes, chaptersRes, progressRes] = await Promise.all([
-        axios.get(`/api/courses/${params.courseId}`),
-        axios.get(`/api/courses/${params.courseId}/chapters`),
-        axios.get(`/api/progress/course/${params.courseId}`),
+        axios.get(`/courses/${params.courseId}`),
+        axios.get(`/courses/${params.courseId}/chapters`),
+        axios.get(`/progress/course/${params.courseId}`),
       ]);
 
       setCourse(courseRes.data);
@@ -63,7 +63,7 @@ function CourseViewerContent() {
   const completeChapter = async (chapterId: string) => {
     setCompleting(true);
     try {
-      await axios.post(`/api/progress/${chapterId}/complete`);
+      await axios.post(`/progress/${chapterId}/complete`);
       await fetchCourseData();
     } catch (error: any) {
       alert(error.response?.data?.message || 'Error completing chapter');
@@ -75,7 +75,7 @@ function CourseViewerContent() {
   const generateCertificate = async () => {
     setGenerating(true);
     try {
-      await axios.post(`/api/certificates/course/${params.courseId}`);
+      await axios.post(`/certificates/course/${params.courseId}`);
       router.push('/certificates');
     } catch (error: any) {
       alert(error.response?.data?.message || 'Error generating certificate');

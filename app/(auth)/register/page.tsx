@@ -8,7 +8,7 @@ import { Alert } from '@/components/ui/Alert';
 import { ModeToggle } from '@/components/mode-toggle';
 import { UserPlus, Mail, Lock, User, Check, ArrowRight, Sparkles, Shield, BookOpen, Award, GraduationCap, UserCheck } from 'lucide-react';
 
-type UserRole = 'STUDENT' | 'MENTOR' | 'ADMIN';
+type UserRole = 'STUDENT' | 'MENTOR';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -263,7 +263,7 @@ export default function RegisterPage() {
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
                     Select Your Role
                   </label>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 gap-4">
                     <button
                       type="button"
                       onClick={() => setRole('STUDENT')}
@@ -277,6 +277,7 @@ export default function RegisterPage() {
                         <GraduationCap className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                       </div>
                       <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">Student</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Learn & grow</div>
                     </button>
                     <button
                       type="button"
@@ -291,22 +292,14 @@ export default function RegisterPage() {
                         <UserCheck className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">Mentor</div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setRole('ADMIN')}
-                      className={`p-4 rounded-xl border-2 transition-all text-center hover-scale ${
-                        role === 'ADMIN'
-                          ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20'
-                          : 'border-gray-300 dark:border-gray-700 hover:border-pink-300 dark:hover:border-pink-700'
-                      }`}
-                    >
-                      <div className="w-10 h-10 rounded-lg bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center mb-2 mx-auto">
-                        <Shield className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                      </div>
-                      <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">Admin</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Teach & guide</div>
                     </button>
                   </div>
+                  {role === 'MENTOR' && (
+                    <p className="mt-3 text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
+                      <strong>Note:</strong> Mentor accounts require admin approval before you can create courses.
+                    </p>
+                  )}
                 </div>
 
                 <button
@@ -337,8 +330,7 @@ export default function RegisterPage() {
                 <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">Role Descriptions:</p>
                 <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400">
                   <p><span className="font-semibold text-blue-600 dark:text-blue-400 inline-flex items-center gap-1"><GraduationCap className="w-4 h-4" /> Student:</span> Access courses, track progress, earn certificates</p>
-                  <p><span className="font-semibold text-purple-600 dark:text-purple-400 inline-flex items-center gap-1"><UserCheck className="w-4 h-4" /> Mentor:</span> Create courses, manage students, provide feedback</p>
-                  <p><span className="font-semibold text-pink-600 dark:text-pink-400 inline-flex items-center gap-1"><Shield className="w-4 h-4" /> Admin:</span> Full system access, manage users and content</p>
+                  <p><span className="font-semibold text-purple-600 dark:text-purple-400 inline-flex items-center gap-1"><UserCheck className="w-4 h-4" /> Mentor:</span> Create courses, manage students (requires approval)</p>
                 </div>
               </div>
             </div>

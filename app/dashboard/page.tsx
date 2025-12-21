@@ -24,15 +24,15 @@ function DashboardContent() {
   const fetchDashboardData = async () => {
     try {
       if (user?.role === 'ADMIN') {
-        const response = await axios.get('/api/users/stats');
+        const response = await axios.get('/users/stats');
         setStats(response.data);
       } else if (user?.role === 'MENTOR') {
-        const response = await axios.get('/api/courses/my');
+        const response = await axios.get('/courses/my');
         setStats({ courses: response.data });
       } else if (user?.role === 'STUDENT') {
         const [coursesRes, progressRes] = await Promise.all([
-          axios.get('/api/courses/my'),
-          axios.get('/api/progress/my').catch(() => ({ data: [] })),
+          axios.get('/courses/my'),
+          axios.get('/progress/my').catch(() => ({ data: [] })),
         ]);
         setStats({ courses: coursesRes.data, progress: progressRes.data });
       }
