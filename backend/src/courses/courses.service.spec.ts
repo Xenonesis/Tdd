@@ -25,7 +25,7 @@ const mockPrismaService = {
   },
   user: {
     findMany: jest.fn(),
-  }
+  },
 };
 
 describe('CoursesService', () => {
@@ -72,16 +72,22 @@ describe('CoursesService', () => {
 
       mockPrismaService.course.create.mockResolvedValue(result);
 
-      const course = await service.createCourse(dto.mentorId, dto.title, dto.description);
+      const course = await service.createCourse(
+        dto.mentorId,
+        dto.title,
+        dto.description,
+      );
 
       expect(course).toEqual(result);
-      expect(prisma.course.create).toHaveBeenCalledWith(expect.objectContaining({
-        data: {
-          title: dto.title,
-          description: dto.description,
-          mentorId: dto.mentorId,
-        },
-      }));
+      expect(prisma.course.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            title: dto.title,
+            description: dto.description,
+            mentorId: dto.mentorId,
+          },
+        }),
+      );
     });
   });
 
@@ -101,25 +107,31 @@ describe('CoursesService', () => {
         { id: 'student-2', role: 'STUDENT' },
       ]);
 
-      const mockAssignment = { id: 'assignment-1', courseId, studentId: 'student-1' };
-      mockPrismaService.courseAssignment.upsert.mockResolvedValue(mockAssignment);
+      const mockAssignment = {
+        id: 'assignment-1',
+        courseId,
+        studentId: 'student-1',
+      };
+      mockPrismaService.courseAssignment.upsert.mockResolvedValue(
+        mockAssignment,
+      );
 
       const result = await service.assignCourse(courseId, mentorId, studentIds);
-      
+
       expect(result).toHaveLength(2);
       expect(prisma.courseAssignment.upsert).toHaveBeenCalledTimes(2);
     });
 
     it('should fail if user is not the mentor of the course', async () => {
       const courseId = 'course-123';
-      
+
       mockPrismaService.course.findUnique.mockResolvedValue({
         id: courseId,
         mentorId: 'different-mentor',
       });
 
       await expect(
-        service.assignCourse(courseId, 'mentor-123', ['student-1'])
+        service.assignCourse(courseId, 'mentor-123', ['student-1']),
       ).rejects.toThrow(ForbiddenException);
     });
   });
@@ -132,7 +144,7 @@ describe('CoursesService', () => {
         title: 'Chapter 1',
         description: 'Desc',
         imageUrl: 'http://img.com',
-        videoUrl: 'http://vid.com'
+        videoUrl: 'http://vid.com',
       };
 
       mockPrismaService.course.findUnique.mockResolvedValue({
@@ -151,12 +163,12 @@ describe('CoursesService', () => {
       });
 
       const result = await service.addChapter(
-        courseId, 
-        mentorId, 
-        chapterData.title, 
-        chapterData.description, 
-        chapterData.imageUrl, 
-        chapterData.videoUrl
+        courseId,
+        mentorId,
+        chapterData.title,
+        chapterData.description,
+        chapterData.imageUrl,
+        chapterData.videoUrl,
       );
 
       expect(result.sequenceOrder).toBe(1);

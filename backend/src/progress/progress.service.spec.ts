@@ -1,7 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProgressService } from './progress.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 
 const mockPrismaService = {
   chapter: {
@@ -19,7 +23,7 @@ const mockPrismaService = {
   },
   course: {
     findUnique: jest.fn(),
-  }
+  },
 };
 
 describe('ProgressService', () => {
@@ -53,13 +57,14 @@ describe('ProgressService', () => {
       mockPrismaService.chapter.findUnique.mockResolvedValue({
         id: chapterId,
         courseId: 'course-1',
-        course: { chapters: [] }
+        course: { chapters: [] },
       });
 
       mockPrismaService.courseAssignment.findUnique.mockResolvedValue(null);
 
-      await expect(service.completeChapter(studentId, chapterId))
-        .rejects.toThrow(ForbiddenException);
+      await expect(
+        service.completeChapter(studentId, chapterId),
+      ).rejects.toThrow(ForbiddenException);
     });
 
     it('should throw BadRequestException if previous chapter is not completed', async () => {
@@ -75,18 +80,21 @@ describe('ProgressService', () => {
       mockPrismaService.chapter.findUnique.mockResolvedValue({
         id: chapterId,
         courseId,
-        course: { 
+        course: {
           chapters: chapters,
-        }
+        },
       });
 
-      mockPrismaService.courseAssignment.findUnique.mockResolvedValue({ id: 'assign-1' });
-      
+      mockPrismaService.courseAssignment.findUnique.mockResolvedValue({
+        id: 'assign-1',
+      });
+
       // Mock that chapter 1 progress is missing
       mockPrismaService.progress.findUnique.mockResolvedValue(null);
 
-      await expect(service.completeChapter(studentId, chapterId))
-        .rejects.toThrow(BadRequestException);
+      await expect(
+        service.completeChapter(studentId, chapterId),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('should complete chapter if sequence is valid', async () => {
@@ -105,10 +113,15 @@ describe('ProgressService', () => {
         course: { chapters },
       });
 
-      mockPrismaService.courseAssignment.findUnique.mockResolvedValue({ id: 'assign-1' });
+      mockPrismaService.courseAssignment.findUnique.mockResolvedValue({
+        id: 'assign-1',
+      });
 
       // Mock previous chapter progress exists
-      mockPrismaService.progress.findUnique.mockResolvedValue({ id: 'progress-1', completedAt: new Date() });
+      mockPrismaService.progress.findUnique.mockResolvedValue({
+        id: 'progress-1',
+        completedAt: new Date(),
+      });
 
       mockPrismaService.progress.upsert.mockResolvedValue({
         id: 'progress-2',
@@ -116,13 +129,14 @@ describe('ProgressService', () => {
         chapterId,
         completedAt: new Date(),
       });
-      
+
       mockPrismaService.progress.findMany.mockResolvedValue([
-         { id: 'progress-1' }, { id: 'progress-2' } 
+        { id: 'progress-1' },
+        { id: 'progress-2' },
       ]);
 
       const result = await service.completeChapter(studentId, chapterId);
-      
+
       expect(result.progress.id).toBe('progress-2');
       expect(result.isComplete).toBe(true);
     });

@@ -43,7 +43,9 @@ describe('CertificatesService', () => {
     prisma = module.get<PrismaService>(PrismaService);
 
     // Mock PDF creation to avoid writes
-    jest.spyOn<any, any>(service, 'createPDF').mockResolvedValue('/uploads/cert.pdf');
+    jest
+      .spyOn<any, any>(service, 'createPDF')
+      .mockResolvedValue('/uploads/cert.pdf');
   });
 
   afterEach(() => {
@@ -56,19 +58,22 @@ describe('CertificatesService', () => {
       const courseId = 'course-1';
 
       mockPrismaService.user.findUnique.mockResolvedValue({ id: studentId });
-      
+
       mockPrismaService.course.findUnique.mockResolvedValue({
         id: courseId,
         chapters: [{ id: 'ch-1' }, { id: 'ch-2' }],
       });
 
-      mockPrismaService.courseAssignment.findUnique.mockResolvedValue({ id: 'assign-1' });
+      mockPrismaService.courseAssignment.findUnique.mockResolvedValue({
+        id: 'assign-1',
+      });
 
       // Only 1 chapter completed
       mockPrismaService.progress.findMany.mockResolvedValue([{ id: 'prog-1' }]);
 
-      await expect(service.generateCertificate(studentId, courseId))
-        .rejects.toThrow(BadRequestException);
+      await expect(
+        service.generateCertificate(studentId, courseId),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('should generate certificate if eligible', async () => {
@@ -76,10 +81,10 @@ describe('CertificatesService', () => {
       const courseId = 'course-1';
       const chapters = [{ id: 'ch-1' }];
 
-      mockPrismaService.user.findUnique.mockResolvedValue({ 
-        id: studentId, 
-        firstName: 'John', 
-        lastName: 'Doe' 
+      mockPrismaService.user.findUnique.mockResolvedValue({
+        id: studentId,
+        firstName: 'John',
+        lastName: 'Doe',
       });
 
       mockPrismaService.course.findUnique.mockResolvedValue({
@@ -88,16 +93,18 @@ describe('CertificatesService', () => {
         chapters,
       });
 
-      mockPrismaService.courseAssignment.findUnique.mockResolvedValue({ id: 'assign-1' });
+      mockPrismaService.courseAssignment.findUnique.mockResolvedValue({
+        id: 'assign-1',
+      });
 
       mockPrismaService.progress.findMany.mockResolvedValue([{ id: 'prog-1' }]); // 1 of 1 completed
-      
+
       mockPrismaService.certificate.findUnique.mockResolvedValue(null); // No existing cert
 
       mockPrismaService.certificate.create.mockResolvedValue({
         id: 'cert-1',
         studentId,
-        courseId
+        courseId,
       });
 
       mockPrismaService.certificate.update.mockResolvedValue({

@@ -45,7 +45,7 @@ describe('UsersService', () => {
   describe('approveMentor', () => {
     it('should approve a pending mentor', async () => {
       const userId = 'mentor-1';
-      
+
       mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         role: 'MENTOR',
@@ -61,36 +61,40 @@ describe('UsersService', () => {
       const result = await service.approveMentor(userId);
 
       expect(result.isActive).toBe(true);
-      expect(prisma.user.update).toHaveBeenCalledWith(expect.objectContaining({
-        where: { id: userId },
-        data: { isActive: true },
-      }));
+      expect(prisma.user.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: userId },
+          data: { isActive: true },
+        }),
+      );
     });
 
     it('should throw BadRequestException if user is not a mentor', async () => {
       const userId = 'student-1';
-      
+
       mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         role: 'STUDENT',
         isActive: true,
       });
 
-      await expect(service.approveMentor(userId))
-        .rejects.toThrow(BadRequestException);
+      await expect(service.approveMentor(userId)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should throw BadRequestException if mentor is already active', async () => {
       const userId = 'mentor-active';
-      
+
       mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         role: 'MENTOR',
         isActive: true,
       });
 
-      await expect(service.approveMentor(userId))
-        .rejects.toThrow(BadRequestException);
+      await expect(service.approveMentor(userId)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -98,12 +102,12 @@ describe('UsersService', () => {
     it('should return aggregated stats', async () => {
       mockPrismaService.user.count
         .mockResolvedValueOnce(10) // total
-        .mockResolvedValueOnce(5)  // students
-        .mockResolvedValueOnce(3)  // mentors
-        .mockResolvedValueOnce(2)  // admins
-        .mockResolvedValueOnce(2)  // active mentors
+        .mockResolvedValueOnce(5) // students
+        .mockResolvedValueOnce(3) // mentors
+        .mockResolvedValueOnce(2) // admins
+        .mockResolvedValueOnce(2) // active mentors
         .mockResolvedValueOnce(1); // pending mentors
-      
+
       mockPrismaService.course.count.mockResolvedValue(4);
       mockPrismaService.certificate.count.mockResolvedValue(2);
 
