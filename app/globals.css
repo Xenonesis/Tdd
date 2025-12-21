@@ -32,7 +32,7 @@
   --radius: 0.5rem;
 }
 
-/* Dark Mode */
+/* Dark Mode - Using #0C0C0C background and silver text */
 .dark {
   color-scheme: dark light;
 
@@ -224,9 +224,7 @@
   box-sizing: border-box;
 }
 
-html {
-  /* scroll-behavior moved to data attribute for Next.js compatibility */
-}
+/* Note: scroll-behavior is handled via data attribute for Next.js compatibility */
 
 body {
   background: var(--background);
@@ -235,6 +233,31 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   DARK MODE TEXT OVERRIDES - Silver Colors
+   ============================================ */
+
+/* Override Tailwind's dark:text-white to use silver instead */
+.dark .text-white,
+.dark [class*="dark:text-white"] {
+  --tw-text-opacity: 1;
+  color: rgb(192 192 192 / var(--tw-text-opacity)) !important; /* Silver #C0C0C0 */
+}
+
+/* Override dark:hover:text-white states */
+.dark .hover\:text-white:hover,
+.dark [class*="dark:hover:text-white"]:hover {
+  --tw-text-opacity: 1;
+  color: rgb(224 224 224 / var(--tw-text-opacity)) !important; /* Brighter silver on hover #E0E0E0 */
+}
+
+/* Apply silver to gray-900/950 in dark mode for better contrast */
+.dark .text-gray-900,
+.dark .text-gray-950 {
+  --tw-text-opacity: 1;
+  color: rgb(192 192 192 / var(--tw-text-opacity)); /* Silver #C0C0C0 */
 }
 
 /* ============================================
@@ -679,6 +702,18 @@ body {
   --color-secondary: var(--secondary-500);
   --font-sans: 'Inter', var(--font-geist-sans), sans-serif;
   --font-mono: var(--font-geist-mono);
+  
+  /* Silver color palette for dark mode text */
+  --color-silver-50: #F5F5F5;
+  --color-silver-100: #E8E8E8;
+  --color-silver-200: #D3D3D3;
+  --color-silver-300: #C0C0C0;
+  --color-silver-400: #A8A8A8;
+  --color-silver-500: #909090;
+  --color-silver-600: #787878;
+  --color-silver-700: #606060;
+  --color-silver-800: #484848;
+  --color-silver-900: #303030;
 }
 
 /* ============================================
