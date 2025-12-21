@@ -70,8 +70,8 @@ function AdminUsersContent() {
     setProcessing(true);
     try {
       const endpoint = currentStatus 
-        ? `/api/users/${userId}/deactivate` 
-        : `/api/users/${userId}/activate`;
+        ? `/users/${userId}/deactivate` 
+        : `/users/${userId}/activate`;
       await axios.put(endpoint);
       fetchUsers();
     } catch (error: any) {
