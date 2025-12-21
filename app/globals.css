@@ -236,29 +236,77 @@ body {
 }
 
 /* ============================================
-   DARK MODE TEXT OVERRIDES - Silver Colors
+   DARK MODE OVERRIDES - #0C0C0C Background & Silver Text
    ============================================ */
+
+/* Force #0C0C0C background for all dark mode gray backgrounds */
+.dark .bg-gray-900,
+.dark .bg-gray-950,
+.dark [class*="dark:bg-gray-900"],
+.dark [class*="dark:bg-gray-950"] {
+  --tw-bg-opacity: 1;
+  background-color: #0C0C0C !important;
+}
+
+/* Slightly lighter backgrounds for cards and secondary elements */
+.dark .bg-gray-800,
+.dark [class*="dark:bg-gray-800"] {
+  --tw-bg-opacity: 1;
+  background-color: #1a1a1a !important;
+}
 
 /* Override Tailwind's dark:text-white to use silver instead */
 .dark .text-white,
 .dark [class*="dark:text-white"] {
   --tw-text-opacity: 1;
-  color: rgb(192 192 192 / var(--tw-text-opacity)) !important; /* Silver #C0C0C0 */
+  color: #C0C0C0 !important; /* Silver */
 }
 
 /* Override dark:hover:text-white states */
 .dark .hover\:text-white:hover,
 .dark [class*="dark:hover:text-white"]:hover {
   --tw-text-opacity: 1;
-  color: rgb(224 224 224 / var(--tw-text-opacity)) !important; /* Brighter silver on hover #E0E0E0 */
+  color: #E0E0E0 !important; /* Brighter silver on hover */
 }
 
-/* Apply silver to gray-900/950 in dark mode for better contrast */
+/* Apply silver to dark gray text in dark mode for better contrast */
 .dark .text-gray-900,
-.dark .text-gray-950 {
+.dark .text-gray-950,
+.dark [class*="dark:text-gray-100"],
+.dark [class*="dark:text-gray-200"] {
   --tw-text-opacity: 1;
-  color: rgb(192 192 192 / var(--tw-text-opacity)); /* Silver #C0C0C0 */
+  color: #C0C0C0 !important; /* Silver */
 }
+
+/* Muted text uses dimmer silver */
+.dark .text-gray-400,
+.dark .text-gray-500,
+.dark .text-gray-600,
+.dark [class*="dark:text-gray-400"],
+.dark [class*="dark:text-gray-300"] {
+  --tw-text-opacity: 1;
+  color: #A8A8A8 !important; /* Dimmer silver */
+}
+
+/* Border colors - subtle silver tint */
+.dark .border-gray-700,
+.dark .border-gray-800,
+.dark [class*="dark:border-gray-700"],
+.dark [class*="dark:border-gray-800"] {
+  --tw-border-opacity: 1;
+  border-color: #2a2a2a !important;
+}
+
+/* Semi-transparent backgrounds for navbars and overlays */
+.dark [class*="dark:bg-gray-900/"],
+.dark [class*="dark:bg-gray-950/"] {
+  background-color: rgba(12, 12, 12, 0.8) !important;
+}
+
+.dark [class*="dark:bg-gray-800/"] {
+  background-color: rgba(26, 26, 26, 0.8) !important;
+}
+
 
 /* ============================================
    ANIMATIONS
