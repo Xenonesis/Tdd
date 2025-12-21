@@ -3,10 +3,10 @@
 import { useAuth } from '@/lib/auth/AuthContext';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RoleBadge } from './ui/Badge';
 import { ModeToggle } from './mode-toggle';
-import { Home, BookOpen, BarChart3, GraduationCap, Users } from 'lucide-react';
+import { Home, BookOpen, BarChart3, GraduationCap, Users, Menu, X, ChevronDown, Rocket, LogOut } from 'lucide-react';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -14,6 +14,16 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -24,18 +34,18 @@ export default function Navbar() {
 
   const navLinks = {
     STUDENT: [
-      { href: '/dashboard', label: 'Dashboard', icon: <Home className="w-4 h-4" /> },
-      { href: '/courses', label: 'My Courses', icon: <BookOpen className="w-4 h-4" /> },
+      { href: '/dashboard', label: 'Home', icon: <Home className="w-4 h-4" /> },
+      { href: '/courses', label: 'Courses', icon: <BookOpen className="w-4 h-4" /> },
       { href: '/progress', label: 'Progress', icon: <BarChart3 className="w-4 h-4" /> },
-      { href: '/certificates', label: 'Certificates', icon: <GraduationCap className="w-4 h-4" /> },
+      { href: '/certificates', label: 'Awards', icon: <GraduationCap className="w-4 h-4" /> },
     ],
     MENTOR: [
-      { href: '/dashboard', label: 'Dashboard', icon: <Home className="w-4 h-4" /> },
+      { href: '/dashboard', label: 'Home', icon: <Home className="w-4 h-4" /> },
       { href: '/mentor/courses', label: 'My Courses', icon: <BookOpen className="w-4 h-4" /> },
       { href: '/mentor/students', label: 'Students', icon: <Users className="w-4 h-4" /> },
     ],
     ADMIN: [
-      { href: '/dashboard', label: 'Dashboard', icon: <Home className="w-4 h-4" /> },
+      { href: '/dashboard', label: 'Overview', icon: <Home className="w-4 h-4" /> },
       { href: '/admin/users', label: 'Users', icon: <Users className="w-4 h-4" /> },
       { href: '/admin/courses', label: 'Courses', icon: <BookOpen className="w-4 h-4" /> },
       { href: '/admin/analytics', label: 'Analytics', icon: <BarChart3 className="w-4 h-4" /> },
@@ -45,31 +55,60 @@ export default function Navbar() {
   const links = user?.role ? navLinks[user.role] : [];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center shadow-lg">
-              <GraduationCap className="text-white w-5 h-5" />
+    <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
+      <nav 
+        className={`
+          w-full max-w-6xl transition-all duration-300 ease-in-out
+          ${scrolled 
+            ? 'bg-white/80 dark:bg-[#0C0C0C]/80 shadow-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-full py-3 px-6' 
+            : 'bg-transparent border-transparent py-4 px-4'
+          }
+        `}
+      >
+        <div className="flex items-center justify-between">
+          {/* Logo Section */}
+          <Link href="/dashboard" className="flex items-center gap-3 group">
+            <div className={`
+              w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-105
+              bg-gradient-to-br from-indigo-600 to-violet-600
+            `}>
+              <Rocket className="text-white w-5 h-5" />
             </div>
-            <span className="text-xl font-bold text-gradient hidden sm:block">InternLMS</span>
+            <span className={`
+              text-xl font-bold tracking-tight transition-colors duration-300
+              ${scrolled ? 'text-gray-900 dark:text-white' : 'text-gray-900 dark:text-white'}
+            `}>
+              InternLMS
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className={`
+            hidden md:flex items-center gap-1 p-1.5 rounded-full transition-all duration-300
+            ${scrolled ? 'bg-gray-100/50 dark:bg-white/5 border border-transparent' : 'bg-white/80 dark:bg-[#0C0C0C]/50 border border-gray-200 dark:border-white/10 backdrop-blur-md shadow-sm'}
+          `}>
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  isActive(link.href)
-                    ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
+                className={`
+                  relative px-5 py-2 rounded-full text-sm font-medium transition-all duration-300
+                  flex items-center gap-2 group overflow-hidden
+                  ${isActive(link.href)
+                    ? 'text-white'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }
+                `}
               >
-                <span className="mr-1.5">{link.icon}</span>
-                {link.label}
+                {isActive(link.href) && (
+                  <span className="absolute inset-0 bg-gray-900 dark:bg-white rounded-full transition-all duration-300 -z-10" />
+                )}
+                <span className={`transition-colors duration-200 ${isActive(link.href) ? 'text-white dark:text-black' : ''}`}>
+                  {link.label}
+                </span>
+                {isActive(link.href) && (
+                   <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white/30 dark:bg-black/20 rounded-full mb-1" />
+                )}
               </Link>
             ))}
           </div>
@@ -77,19 +116,26 @@ export default function Navbar() {
           {/* Right Section */}
           <div className="flex items-center gap-3">
              <ModeToggle />
+            
             {/* Profile Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                className="flex items-center gap-3 p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className={`
+                  flex items-center gap-3 pl-2 pr-1.5 py-1.5 rounded-full transition-all duration-300
+                  hover:bg-gray-100 dark:hover:bg-white/10 border border-transparent
+                  ${profileDropdownOpen ? 'bg-gray-100 dark:bg-white/10' : ''}
+                `}
               >
-                <div className="hidden sm:block text-right">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                    {user?.firstName} {user?.lastName}
+                <div className="hidden sm:block text-right mr-1">
+                  <p className="text-xs font-bold text-gray-900 dark:text-white leading-none mb-0.5">
+                    {user?.firstName}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{user?.role}</p>
+                  <p className="text-[10px] text-gray-500 dark:text-gray-400 font-medium tracking-wide uppercase">
+                    {user?.role}
+                  </p>
                 </div>
-                <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center text-white font-semibold shadow-lg">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 flex items-center justify-center text-white dark:text-black font-bold shadow-md ring-2 ring-white dark:ring-black/20">
                   {user?.firstName?.[0]}{user?.lastName?.[0]}
                 </div>
               </button>
@@ -101,43 +147,49 @@ export default function Navbar() {
                     className="fixed inset-0 z-40"
                     onClick={() => setProfileDropdownOpen(false)}
                   />
-                  <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50 animate-scaleIn">
-                    {/* User Info */}
-                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                      <p className="font-semibold text-gray-900 dark:text-white">
-                        {user?.firstName} {user?.lastName}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">{user?.email}</p>
-                      <div className="mt-2">
-                        <RoleBadge role={user?.role || 'STUDENT'} />
-                      </div>
+                  <div className="absolute right-0 top-full mt-3 w-72 bg-white dark:bg-[#121212] rounded-3xl shadow-2xl border border-gray-100 dark:border-white/10 p-2 z-50 animate-scaleIn origin-top-right overflow-hidden">
+                    {/* User Info Header */}
+                    <div className="px-5 py-4 bg-gray-50/50 dark:bg-white/5 rounded-2xl mb-2">
+                       <div className="flex items-center gap-3 mb-2">
+                         <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                            {user?.firstName?.[0]}
+                         </div>
+                         <div>
+                            <p className="font-bold text-gray-900 dark:text-white text-lg">
+                              {user?.firstName} {user?.lastName}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                              {user?.email}
+                            </p>
+                         </div>
+                       </div>
+                       <RoleBadge role={user?.role || 'STUDENT'} />
                     </div>
                     
                     {/* Menu Items */}
-                    <div className="py-1">
+                    <div className="space-y-1 mx-1">
                       <Link
                         href="/dashboard"
-                        className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-indigo-600 dark:hover:text-white transition-all group"
                         onClick={() => setProfileDropdownOpen(false)}
                       >
-                        <Home className="w-5 h-5" />
-                        <span>Dashboard</span>
+                        <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-white dark:group-hover:bg-white/20 transition-colors">
+                          <Home className="w-4 h-4" />
+                        </div>
+                        <span className="font-medium">Dashboard</span>
                       </Link>
-                    </div>
-
-                    {/* Logout */}
-                    <div className="border-t border-gray-200 dark:border-gray-700 pt-1">
+                      
                       <button
                         onClick={() => {
                           setProfileDropdownOpen(false);
                           handleLogout();
                         }}
-                        className="flex items-center gap-3 w-full px-4 py-2.5 text-left text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                        className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all group"
                       >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                        <span>Sign Out</span>
+                        <div className="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/10 flex items-center justify-center group-hover:bg-red-100 dark:group-hover:bg-red-900/30 transition-colors">
+                          <LogOut className="w-4 h-4" />
+                        </div>
+                        <span className="font-medium">Sign Out</span>
                       </button>
                     </div>
                   </div>
@@ -145,47 +197,60 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - Circular & Floating */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="md:hidden w-10 h-10 rounded-full bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-700 dark:text-white shadow-sm hover:scale-105 transition-transform"
             >
               {mobileMenuOpen ? (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <X className="w-5 h-5" />
               ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+                <Menu className="w-5 h-5" />
               )}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200 dark:border-gray-700 animate-fadeIn">
-            <div className="space-y-1">
+          <div className="md:hidden mt-4 p-2 bg-white dark:bg-[#121212] rounded-3xl shadow-2xl border border-gray-100 dark:border-white/10 animate-fade-in-down origin-top">
+            <div className="grid grid-cols-2 gap-2">
               {links.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${
-                    isActive(link.href)
-                      ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
+                  className={`
+                    flex flex-col items-center justify-center gap-2 p-4 rounded-2xl transition-all
+                    ${isActive(link.href)
+                      ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-300 ring-1 ring-indigo-100 dark:ring-indigo-500/30'
+                      : 'bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10'
+                    }
+                  `}
                 >
-                  <span>{link.icon}</span>
-                  <span>{link.label}</span>
+                  <div className={`
+                    w-10 h-10 rounded-full flex items-center justify-center
+                    ${isActive(link.href) ? 'bg-white dark:bg-indigo-500/20' : 'bg-white dark:bg-white/5'}
+                  `}>
+                    {link.icon}
+                  </div>
+                  <span className="font-medium text-sm">{link.label}</span>
                 </Link>
               ))}
             </div>
+            
+            <div className="mt-2 pt-2 border-t border-gray-100 dark:border-white/5">
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center gap-2 p-3 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl font-medium transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </button>
+            </div>
           </div>
         )}
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }
