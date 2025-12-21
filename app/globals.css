@@ -36,24 +36,24 @@
 .dark {
   color-scheme: dark light;
 
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
+  --background: 0 0% 4.7%; /* #0C0C0C */
+  --foreground: 0 0% 75%; /* Silver #C0C0C0 */
+  --card: 0 0% 4.7%; /* #0C0C0C */
+  --card-foreground: 0 0% 75%; /* Silver #C0C0C0 */
+  --popover: 0 0% 4.7%; /* #0C0C0C */
+  --popover-foreground: 0 0% 75%; /* Silver #C0C0C0 */
   --primary: 217.2 91.2% 59.8%;
-  --primary-foreground: 222.2 84% 4.9%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
+  --primary-foreground: 0 0% 75%; /* Silver #C0C0C0 */
+  --secondary: 0 0% 10%; /* Slightly lighter than background */
+  --secondary-foreground: 0 0% 75%; /* Silver #C0C0C0 */
+  --muted: 0 0% 10%; /* Slightly lighter than background */
+  --muted-foreground: 0 0% 66%; /* Dimmer silver #A8A8A8 */
+  --accent: 0 0% 10%; /* Slightly lighter than background */
+  --accent-foreground: 0 0% 75%; /* Silver #C0C0C0 */
   --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
+  --destructive-foreground: 0 0% 75%; /* Silver #C0C0C0 */
+  --border: 0 0% 15%; /* Slightly lighter for borders */
+  --input: 0 0% 10%; /* Slightly lighter than background */
   --ring: 224.3 76.3% 94.1%;
 }
 
@@ -140,32 +140,38 @@
 }
 
 .dark {
-  --background: var(--gray-950);
-  --foreground: var(--gray-50);
+  /* Silver color palette for dark mode */
+  --silver-100: #C0C0C0; /* Main silver text */
+  --silver-200: #B8B8B8;
+  --silver-300: #A8A8A8; /* Dimmer silver */
+  --silver-400: #909090; /* Even dimmer */
 
-  --card: var(--gray-900);
-  --card-foreground: var(--gray-50);
+  --background: #0C0C0C;
+  --foreground: var(--silver-100);
+
+  --card: #0C0C0C;
+  --card-foreground: var(--silver-100);
   
-  --popover: var(--gray-900);
-  --popover-foreground: var(--gray-50);
+  --popover: #0C0C0C;
+  --popover-foreground: var(--silver-100);
   
   --primary: var(--primary-500);
-  --primary-foreground: #ffffff;
+  --primary-foreground: var(--silver-100);
   
-  --secondary: var(--gray-800);
-  --secondary-foreground: var(--gray-50);
+  --secondary: #1a1a1a; /* Slightly lighter than background */
+  --secondary-foreground: var(--silver-100);
   
-  --muted: var(--gray-800);
-  --muted-foreground: var(--gray-400);
+  --muted: #1a1a1a;
+  --muted-foreground: var(--silver-300);
   
-  --accent: var(--gray-800);
-  --accent-foreground: var(--gray-50);
+  --accent: #1a1a1a;
+  --accent-foreground: var(--silver-100);
   
   --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: var(--gray-50);
+  --destructive-foreground: var(--silver-100);
   
-  --border: var(--gray-800);
-  --input: var(--gray-800);
+  --border: #262626; /* Subtle border */
+  --input: #1a1a1a;
   --ring: var(--primary-400);
 }
 
@@ -186,13 +192,13 @@
 }
 
 .dark .glass {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(12, 12, 12, 0.6);
+  border: 1px solid rgba(192, 192, 192, 0.1); /* Silver border */
 }
 
 .dark .glass-card {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(12, 12, 12, 0.6);
+  border: 1px solid rgba(192, 192, 192, 0.1); /* Silver border */
   box-shadow: none;
 }
 
