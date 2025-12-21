@@ -38,7 +38,12 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await register(name, email, password, role);
+      // Split full name into first and last name
+      const nameParts = name.trim().split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      
+      await register({ email, password, firstName, lastName, role });
       router.push('/dashboard');
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
