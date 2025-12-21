@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { LoadingCard } from '@/components/ui/Loading';
 import Link from 'next/link';
+import { BookOpen, Download, Eye, GraduationCap } from 'lucide-react';
 
 export default function CertificatesPage() {
   return (
@@ -104,7 +105,7 @@ function CertificatesContent() {
             <div className="w-32 h-32 mx-auto mb-6 relative">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl transform rotate-6 opacity-20" />
               <div className="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl flex items-center justify-center">
-                <span className="text-6xl">🎓</span>
+                <GraduationCap className="w-16 h-16 text-gray-400" />
               </div>
             </div>
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
@@ -115,7 +116,7 @@ function CertificatesContent() {
               automatically generated when you finish all chapters in a course.
             </p>
             <Link href="/courses">
-              <Button icon={<span>📚</span>}>View My Courses</Button>
+              <Button icon={<BookOpen className="w-4 h-4" />}>View My Courses</Button>
             </Link>
           </div>
         ) : (
@@ -133,7 +134,7 @@ function CertificatesContent() {
                   
                   <div className="relative z-10 h-full flex flex-col justify-between text-white">
                     <div className="flex justify-between items-start">
-                      <span className="text-4xl">🎓</span>
+                      <GraduationCap className="w-10 h-10 text-white" />
                       <Badge variant="accent" size="sm">Certificate</Badge>
                     </div>
                     <div>
@@ -147,11 +148,7 @@ function CertificatesContent() {
                     <Button
                       onClick={() => downloadCertificate(certificate.id, certificate.course.title)}
                       loading={downloading === certificate.id}
-                      icon={
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                      }
+                      icon={<Download className="w-5 h-5" />}
                     >
                       Download PDF
                     </Button>
@@ -187,11 +184,7 @@ function CertificatesContent() {
                       size="sm"
                       onClick={() => downloadCertificate(certificate.id, certificate.course.title)}
                       loading={downloading === certificate.id}
-                      icon={
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                      }
+                      icon={<Download className="w-4 h-4" />}
                     >
                       Download
                     </Button>

@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import axios from '@/lib/axios';
 import { ProgressBar, CircularProgress } from '@/components/ui/ProgressBar';
 import { LoadingCard } from '@/components/ui/Loading';
+import { Users, BookOpen, GraduationCap, UserCheck } from 'lucide-react';
 
 export default function AdminAnalyticsPage() {
   return (
@@ -82,7 +83,7 @@ function AdminAnalyticsContent() {
                 <p className="text-white/60 text-sm mt-2">All registered users</p>
               </div>
               <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center">
-                <span className="text-3xl">👥</span>
+                <Users className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
               </div>
             </div>
           </div>
@@ -95,7 +96,7 @@ function AdminAnalyticsContent() {
                 <p className="text-white/60 text-sm mt-2">Active courses</p>
               </div>
               <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center">
-                <span className="text-3xl">📚</span>
+                <BookOpen className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
               </div>
             </div>
           </div>
@@ -108,7 +109,7 @@ function AdminAnalyticsContent() {
                 <p className="text-white/60 text-sm mt-2">Issued certificates</p>
               </div>
               <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center">
-                <span className="text-3xl">🎓</span>
+                <GraduationCap className="w-8 h-8 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
           </div>
@@ -121,7 +122,7 @@ function AdminAnalyticsContent() {
                 <p className="text-white/60 text-sm mt-2">Approved & teaching</p>
               </div>
               <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center">
-                <span className="text-3xl">👨‍🏫</span>
+                <UserCheck className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
           </div>

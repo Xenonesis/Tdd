@@ -7,6 +7,7 @@ import axios from '@/lib/axios';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { Badge } from '@/components/ui/Badge';
 import { LoadingList } from '@/components/ui/Loading';
+import { Users, Check, BarChart3 } from 'lucide-react';
 
 export default function MentorStudentsPage() {
   return (
@@ -86,7 +87,7 @@ function MentorStudentsContent() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
-              <span className="text-2xl">👥</span>
+              <Users className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{students.length}</p>
@@ -95,7 +96,7 @@ function MentorStudentsContent() {
           </div>
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-              <span className="text-2xl">✓</span>
+              <Check className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalCompleted}</p>
@@ -104,7 +105,7 @@ function MentorStudentsContent() {
           </div>
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-              <span className="text-2xl">📊</span>
+              <BarChart3 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{averageProgress}%</p>
@@ -117,7 +118,7 @@ function MentorStudentsContent() {
           /* Empty State */
           <div className="card p-12 text-center">
             <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-6">
-              <span className="text-5xl">👥</span>
+              <Users className="w-12 h-12 text-gray-400" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
               No Students Yet
@@ -170,7 +171,7 @@ function MentorStudentsContent() {
                             {courseProgress.completionPercentage}%
                           </span>
                           {courseProgress.isComplete && (
-                            <Badge variant="success" size="sm" icon={<span>✓</span>}>Done</Badge>
+                            <Badge variant="success" size="sm" icon={<Check className="w-3.5 h-3.5" />}>Done</Badge>
                           )}
                         </div>
                       </div>

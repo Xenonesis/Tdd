@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { RoleBadge } from './ui/Badge';
 import { ModeToggle } from './mode-toggle';
+import { Home, BookOpen, BarChart3, GraduationCap, Users } from 'lucide-react';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -23,21 +24,21 @@ export default function Navbar() {
 
   const navLinks = {
     STUDENT: [
-      { href: '/dashboard', label: 'Dashboard', icon: '🏠' },
-      { href: '/courses', label: 'My Courses', icon: '📚' },
-      { href: '/progress', label: 'Progress', icon: '📊' },
-      { href: '/certificates', label: 'Certificates', icon: '🎓' },
+      { href: '/dashboard', label: 'Dashboard', icon: <Home className="w-4 h-4" /> },
+      { href: '/courses', label: 'My Courses', icon: <BookOpen className="w-4 h-4" /> },
+      { href: '/progress', label: 'Progress', icon: <BarChart3 className="w-4 h-4" /> },
+      { href: '/certificates', label: 'Certificates', icon: <GraduationCap className="w-4 h-4" /> },
     ],
     MENTOR: [
-      { href: '/dashboard', label: 'Dashboard', icon: '🏠' },
-      { href: '/mentor/courses', label: 'My Courses', icon: '📚' },
-      { href: '/mentor/students', label: 'Students', icon: '👥' },
+      { href: '/dashboard', label: 'Dashboard', icon: <Home className="w-4 h-4" /> },
+      { href: '/mentor/courses', label: 'My Courses', icon: <BookOpen className="w-4 h-4" /> },
+      { href: '/mentor/students', label: 'Students', icon: <Users className="w-4 h-4" /> },
     ],
     ADMIN: [
-      { href: '/dashboard', label: 'Dashboard', icon: '🏠' },
-      { href: '/admin/users', label: 'Users', icon: '👥' },
-      { href: '/admin/courses', label: 'Courses', icon: '📚' },
-      { href: '/admin/analytics', label: 'Analytics', icon: '📊' },
+      { href: '/dashboard', label: 'Dashboard', icon: <Home className="w-4 h-4" /> },
+      { href: '/admin/users', label: 'Users', icon: <Users className="w-4 h-4" /> },
+      { href: '/admin/courses', label: 'Courses', icon: <BookOpen className="w-4 h-4" /> },
+      { href: '/admin/analytics', label: 'Analytics', icon: <BarChart3 className="w-4 h-4" /> },
     ],
   };
 
@@ -50,7 +51,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center gap-3 flex-shrink-0">
             <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center shadow-lg">
-              <span className="text-white text-lg">📚</span>
+              <GraduationCap className="text-white w-5 h-5" />
             </div>
             <span className="text-xl font-bold text-gradient hidden sm:block">InternLMS</span>
           </Link>
@@ -119,7 +120,7 @@ export default function Navbar() {
                         className="flex items-center gap-3 px-4 py-2.5 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                         onClick={() => setProfileDropdownOpen(false)}
                       >
-                        <span>🏠</span>
+                        <Home className="w-5 h-5" />
                         <span>Dashboard</span>
                       </Link>
                     </div>

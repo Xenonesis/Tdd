@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar';
 import CourseCard from '@/components/CourseCard';
 import axios from '@/lib/axios';
 import { LoadingCard, LoadingScreen } from '@/components/ui/Loading';
+import { BookOpen } from 'lucide-react';
 
 export default function CoursesPage() {
   return (
@@ -75,7 +76,7 @@ function CoursesContent() {
           /* Empty State */
           <div className="card p-12 text-center">
             <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-6">
-              <span className="text-5xl">📚</span>
+              <BookOpen className="w-12 h-12 text-gray-400" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
               No Courses Yet

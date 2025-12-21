@@ -11,6 +11,7 @@ import { Input, Textarea } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
 import { LoadingScreen } from '@/components/ui/Loading';
 import { Alert } from '@/components/ui/Alert';
+import { Plus, UserPlus, BookOpen, Users } from 'lucide-react';
 
 export default function MentorCourseDetailPage() {
   return (
@@ -138,7 +139,7 @@ function MentorCourseDetailContent() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex items-start gap-4">
               <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center flex-shrink-0">
-                <span className="text-3xl">📚</span>
+                <BookOpen className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{course?.title}</h1>
@@ -157,16 +158,12 @@ function MentorCourseDetailContent() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <span>📖</span> Chapters
+                <BookOpen className="w-5 h-5" /> Chapters
               </h2>
               <Button
                 size="sm"
                 onClick={() => setShowAddChapterModal(true)}
-                icon={
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                }
+                icon={<Plus className="w-4 h-4" />}
               >
                 Add Chapter
               </Button>
@@ -175,7 +172,7 @@ function MentorCourseDetailContent() {
             {chapters.length === 0 ? (
               <div className="card p-8 text-center">
                 <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">📖</span>
+                  <BookOpen className="w-8 h-8 text-gray-400" />
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">No Chapters Yet</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
@@ -226,18 +223,14 @@ function MentorCourseDetailContent() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <span>👥</span> Enrolled Students
+                <Users className="w-5 h-5" /> Enrolled Students
               </h2>
               <Button
                 size="sm"
                 variant="secondary"
                 onClick={() => setShowAssignStudentModal(true)}
                 disabled={availableStudents.length === 0}
-                icon={
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                  </svg>
-                }
+                icon={<UserPlus className="w-4 h-4" />}
               >
                 Assign Student
               </Button>
@@ -252,7 +245,7 @@ function MentorCourseDetailContent() {
             {students.length === 0 ? (
               <div className="card p-8 text-center">
                 <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">👥</span>
+                  <Users className="w-8 h-8 text-gray-400" />
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">No Students Yet</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">

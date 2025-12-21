@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import axios from '@/lib/axios';
 import { Badge, RoleBadge } from '@/components/ui/Badge';
 import { LoadingTable } from '@/components/ui/Loading';
+import { BookOpen, Users } from 'lucide-react';
 
 export default function AdminCoursesPage() {
   return (
@@ -70,7 +71,7 @@ function AdminCoursesContent() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
-              <span className="text-2xl">📚</span>
+              <BookOpen className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{courses.length}</p>
@@ -79,7 +80,7 @@ function AdminCoursesContent() {
           </div>
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-              <span className="text-2xl">📖</span>
+              <BookOpen className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalChapters}</p>
@@ -88,7 +89,7 @@ function AdminCoursesContent() {
           </div>
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-              <span className="text-2xl">👥</span>
+              <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalStudents}</p>
@@ -101,7 +102,7 @@ function AdminCoursesContent() {
           /* Empty State */
           <div className="card p-12 text-center">
             <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-6">
-              <span className="text-5xl">📚</span>
+              <BookOpen className="w-12 h-12 text-gray-400" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
               No Courses Yet
@@ -134,7 +135,7 @@ function AdminCoursesContent() {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white flex-shrink-0">
-                            <span className="text-xl">📚</span>
+                            <BookOpen className="w-6 h-6" />
                           </div>
                           <div className="min-w-0">
                             <p className="font-semibold text-gray-900 dark:text-white truncate">

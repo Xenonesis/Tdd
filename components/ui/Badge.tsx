@@ -1,6 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
+import { GraduationCap, UserCheck, Crown } from 'lucide-react';
 
 interface BadgeProps {
   variant?: 'primary' | 'secondary' | 'accent' | 'danger' | 'gray' | 'success' | 'warning';
@@ -46,9 +47,9 @@ interface RoleBadgeProps {
 
 export function RoleBadge({ role }: RoleBadgeProps) {
   const roleConfig = {
-    STUDENT: { variant: 'secondary' as const, icon: '🎓', label: 'Student' },
-    MENTOR: { variant: 'primary' as const, icon: '👨‍🏫', label: 'Mentor' },
-    ADMIN: { variant: 'accent' as const, icon: '👑', label: 'Admin' },
+    STUDENT: { variant: 'secondary' as const, icon: <GraduationCap className="w-3.5 h-3.5" />, label: 'Student' },
+    MENTOR: { variant: 'primary' as const, icon: <UserCheck className="w-3.5 h-3.5" />, label: 'Mentor' },
+    ADMIN: { variant: 'accent' as const, icon: <Crown className="w-3.5 h-3.5" />, label: 'Admin' },
   };
 
   const config = roleConfig[role];

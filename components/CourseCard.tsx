@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { ProgressBar } from './ui/ProgressBar';
+import { BookOpen } from 'lucide-react';
 
 interface CourseCardProps {
   course: {
@@ -51,8 +52,8 @@ export default function CourseCard({ course, role }: CourseCardProps) {
         )}
 
         {/* Course Icon */}
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-          <span className="text-2xl">📚</span>
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform text-white">
+          <BookOpen className="w-6 h-6" />
         </div>
 
         {/* Title & Description */}

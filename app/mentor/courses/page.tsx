@@ -11,6 +11,7 @@ import { Modal } from '@/components/ui/Modal';
 import { Input, Textarea } from '@/components/ui/Input';
 import { LoadingCard } from '@/components/ui/Loading';
 import { Badge } from '@/components/ui/Badge';
+import { Plus, BookOpen, Users } from 'lucide-react';
 
 export default function MentorCoursesPage() {
   return (
@@ -96,11 +97,7 @@ function MentorCoursesContent() {
           </div>
           <Button 
             onClick={() => setShowCreateModal(true)}
-            icon={
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-            }
+            icon={<Plus className="w-5 h-5" />}
           >
             Create Course
           </Button>
@@ -110,7 +107,7 @@ function MentorCoursesContent() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
-              <span className="text-2xl">📚</span>
+              <BookOpen className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{courses.length}</p>
@@ -119,7 +116,7 @@ function MentorCoursesContent() {
           </div>
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-              <span className="text-2xl">📖</span>
+              <BookOpen className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalChapters}</p>
@@ -128,7 +125,7 @@ function MentorCoursesContent() {
           </div>
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-              <span className="text-2xl">👥</span>
+              <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalStudents}</p>
@@ -141,7 +138,7 @@ function MentorCoursesContent() {
           /* Empty State */
           <div className="card p-12 text-center">
             <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-6">
-              <span className="text-5xl">📚</span>
+              <BookOpen className="w-12 h-12 text-gray-400" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
               No Courses Yet
@@ -149,7 +146,7 @@ function MentorCoursesContent() {
             <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-6">
               Create your first course to start teaching. Add chapters, assign students, and track their progress.
             </p>
-            <Button onClick={() => setShowCreateModal(true)} icon={<span>+</span>}>
+            <Button onClick={() => setShowCreateModal(true)} icon={<Plus className="w-4 h-4" />}>
               Create Your First Course
             </Button>
           </div>

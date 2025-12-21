@@ -11,6 +11,7 @@ import { ProgressBar, CircularProgress } from '@/components/ui/ProgressBar';
 import { LoadingScreen } from '@/components/ui/Loading';
 import { Alert } from '@/components/ui/Alert';
 import { Badge } from '@/components/ui/Badge';
+import { GraduationCap, Check, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function CourseViewerPage() {
   return (
@@ -136,7 +137,7 @@ function CourseViewerContent() {
                   loading={generating}
                   variant="secondary"
                   size="sm"
-                  icon={<span>🎓</span>}
+                  icon={<GraduationCap className="w-4 h-4" />}
                 >
                   Generate Certificate
                 </Button>
@@ -150,7 +151,7 @@ function CourseViewerContent() {
           <div className="lg:col-span-1 order-2 lg:order-1">
             <div className="card p-6 sticky top-24">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <span>📖</span>
+                <BookOpen className="w-5 h-5" />
                 Chapters
                 <Badge variant="gray" size="sm">{chapters.length}</Badge>
               </h2>
@@ -213,7 +214,7 @@ function CourseViewerContent() {
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
                   <span>Chapter {currentIndex + 1} of {chapters.length}</span>
                   {selectedChapter.isCompleted && (
-                    <Badge variant="success" size="sm" icon={<span>✓</span>}>Completed</Badge>
+                    <Badge variant="success" size="sm" icon={<Check className="w-3.5 h-3.5" />}>Completed</Badge>
                   )}
                 </div>
                 
@@ -268,7 +269,7 @@ function CourseViewerContent() {
                       onClick={() => completeChapter(selectedChapter.id)}
                       loading={completing}
                       size="lg"
-                      icon={<span>✓</span>}
+                      icon={<Check className="w-4 h-4" />}
                     >
                       Mark as Complete
                     </Button>
@@ -287,11 +288,7 @@ function CourseViewerContent() {
                       <Button
                         variant="ghost"
                         onClick={() => setSelectedChapter(chapters[currentIndex - 1])}
-                        icon={
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                          </svg>
-                        }
+                        icon={<ChevronLeft className="w-4 h-4" />}
                       >
                         Previous
                       </Button>
@@ -301,11 +298,7 @@ function CourseViewerContent() {
                         variant="outline"
                         onClick={() => setSelectedChapter(chapters[currentIndex + 1])}
                         iconPosition="right"
-                        icon={
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        }
+                        icon={<ChevronRight className="w-4 h-4" />}
                       >
                         Next
                       </Button>
@@ -315,7 +308,9 @@ function CourseViewerContent() {
               </div>
             ) : (
               <div className="card p-12 text-center">
-                <div className="text-6xl mb-4">📖</div>
+                <div className="w-20 h-20 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center mx-auto mb-4">
+                  <BookOpen className="w-10 h-10 text-indigo-600 dark:text-indigo-400" />
+                </div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   Select a Chapter
                 </h3>

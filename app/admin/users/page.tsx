@@ -9,6 +9,7 @@ import { Badge, RoleBadge, StatusBadge } from '@/components/ui/Badge';
 import { Modal, ConfirmModal } from '@/components/ui/Modal';
 import { LoadingTable } from '@/components/ui/Loading';
 import { Alert } from '@/components/ui/Alert';
+import { Check, X, Users, GraduationCap, UserCheck, Crown } from 'lucide-react';
 
 export default function AdminUsersPage() {
   return (
@@ -151,7 +152,7 @@ function AdminUsersContent() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-              <span className="text-2xl">👥</span>
+              <Users className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{users.length}</p>
@@ -160,7 +161,7 @@ function AdminUsersContent() {
           </div>
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-              <span className="text-2xl">🎓</span>
+              <GraduationCap className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{roleStats.students}</p>
@@ -169,7 +170,7 @@ function AdminUsersContent() {
           </div>
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
-              <span className="text-2xl">👨‍🏫</span>
+              <UserCheck className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{roleStats.mentors}</p>
@@ -178,7 +179,7 @@ function AdminUsersContent() {
           </div>
           <div className="card p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-              <span className="text-2xl">👑</span>
+              <Crown className="w-6 h-6 text-amber-600 dark:text-amber-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{roleStats.admins}</p>
@@ -290,7 +291,7 @@ function AdminUsersContent() {
           pendingMentors.length === 0 ? (
             <div className="card p-12 text-center">
               <div className="w-20 h-20 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mx-auto mb-4">
-                <span className="text-4xl">✓</span>
+                <Check className="w-10 h-10 text-emerald-600 dark:text-emerald-400" />
               </div>
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
                 All Caught Up!
@@ -329,7 +330,7 @@ function AdminUsersContent() {
                       variant="secondary"
                       fullWidth
                       onClick={() => setConfirmAction({ type: 'approve', user: mentor })}
-                      icon={<span>✓</span>}
+                      icon={<Check className="w-4 h-4" />}
                     >
                       Approve
                     </Button>
@@ -337,7 +338,7 @@ function AdminUsersContent() {
                       variant="danger"
                       fullWidth
                       onClick={() => setConfirmAction({ type: 'reject', user: mentor })}
-                      icon={<span>✕</span>}
+                      icon={<X className="w-4 h-4" />}
                     >
                       Reject
                     </Button>

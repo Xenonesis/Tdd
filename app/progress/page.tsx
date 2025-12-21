@@ -10,6 +10,7 @@ import { ProgressBar, CircularProgress } from '@/components/ui/ProgressBar';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { LoadingCard } from '@/components/ui/Loading';
+import { BookOpen, Check, GraduationCap, ArrowRight, BarChart3 } from 'lucide-react';
 
 export default function ProgressPage() {
   return (
@@ -112,7 +113,7 @@ function ProgressContent() {
           {progress.length === 0 ? (
             <div className="card p-12 text-center">
               <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-6">
-                <span className="text-5xl">📊</span>
+                <BarChart3 className="w-12 h-12 text-gray-400" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                 No Progress Yet
@@ -121,7 +122,7 @@ function ProgressContent() {
                 Start learning by accessing your assigned courses. Your progress will be tracked automatically.
               </p>
               <Link href="/courses">
-                <Button icon={<span>📚</span>}>View Courses</Button>
+                <Button icon={<BookOpen className="w-4 h-4" />}>View Courses</Button>
               </Link>
             </div>
           ) : (
@@ -139,7 +140,7 @@ function ProgressContent() {
                         {courseProgress.courseTitle}
                       </h2>
                       {courseProgress.isComplete && (
-                        <Badge variant="success" icon={<span>✓</span>}>Completed</Badge>
+                        <Badge variant="success" icon={<Check className="w-3.5 h-3.5" />}>Completed</Badge>
                       )}
                     </div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
@@ -190,7 +191,7 @@ function ProgressContent() {
                     <Link href={courseProgress.isComplete ? '/certificates' : `/courses/${courseProgress.courseId}`}>
                       <Button 
                         variant={courseProgress.isComplete ? 'secondary' : 'primary'}
-                        icon={courseProgress.isComplete ? <span>🎓</span> : <span>→</span>}
+                        icon={courseProgress.isComplete ? <GraduationCap className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
                         iconPosition="right"
                       >
                         {courseProgress.isComplete ? 'Get Certificate' : 'Continue'}

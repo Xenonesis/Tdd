@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import axios from '@/lib/axios';
 import { LoadingScreen } from '@/components/ui/Loading';
 import { Badge } from '@/components/ui/Badge';
+import { Users, BookOpen, BarChart3, GraduationCap, Check, Clock } from 'lucide-react';
 
 function DashboardContent() {
   const { user } = useAuth();
@@ -44,18 +45,18 @@ function DashboardContent() {
 
   const dashboardCards = {
     ADMIN: [
-      { href: '/admin/users', icon: '👥', title: 'User Management', desc: 'Manage users and approve mentors', color: 'from-blue-500 to-indigo-600' },
-      { href: '/admin/courses', icon: '📚', title: 'All Courses', desc: 'View all courses in the system', color: 'from-emerald-500 to-teal-600' },
-      { href: '/admin/analytics', icon: '📊', title: 'Analytics', desc: 'View platform statistics', color: 'from-purple-500 to-pink-600' },
+      { href: '/admin/users', icon: <Users className="w-8 h-8" />, title: 'User Management', desc: 'Manage users and approve mentors', color: 'from-blue-500 to-indigo-600' },
+      { href: '/admin/courses', icon: <BookOpen className="w-8 h-8" />, title: 'All Courses', desc: 'View all courses in the system', color: 'from-emerald-500 to-teal-600' },
+      { href: '/admin/analytics', icon: <BarChart3 className="w-8 h-8" />, title: 'Analytics', desc: 'View platform statistics', color: 'from-purple-500 to-pink-600' },
     ],
     MENTOR: [
-      { href: '/mentor/courses', icon: '📚', title: 'My Courses', desc: 'Create and manage your courses', color: 'from-blue-500 to-indigo-600' },
-      { href: '/mentor/students', icon: '👥', title: 'Students', desc: 'Track student progress', color: 'from-emerald-500 to-teal-600' },
+      { href: '/mentor/courses', icon: <BookOpen className="w-8 h-8" />, title: 'My Courses', desc: 'Create and manage your courses', color: 'from-blue-500 to-indigo-600' },
+      { href: '/mentor/students', icon: <Users className="w-8 h-8" />, title: 'Students', desc: 'Track student progress', color: 'from-emerald-500 to-teal-600' },
     ],
     STUDENT: [
-      { href: '/courses', icon: '📚', title: 'My Courses', desc: 'Access your assigned courses', color: 'from-blue-500 to-indigo-600' },
-      { href: '/progress', icon: '📊', title: 'Progress', desc: 'Track your learning progress', color: 'from-emerald-500 to-teal-600' },
-      { href: '/certificates', icon: '🎓', title: 'Certificates', desc: 'Download your certificates', color: 'from-purple-500 to-pink-600' },
+      { href: '/courses', icon: <BookOpen className="w-8 h-8" />, title: 'My Courses', desc: 'Access your assigned courses', color: 'from-blue-500 to-indigo-600' },
+      { href: '/progress', icon: <BarChart3 className="w-8 h-8" />, title: 'Progress', desc: 'Track your learning progress', color: 'from-emerald-500 to-teal-600' },
+      { href: '/certificates', icon: <GraduationCap className="w-8 h-8" />, title: 'Certificates', desc: 'Download your certificates', color: 'from-purple-500 to-pink-600' },
     ],
   };
 
@@ -94,7 +95,7 @@ function DashboardContent() {
                   <p className="text-white/80 text-sm font-medium">Total Users</p>
                   <p className="text-3xl font-bold mt-1">{stats.users?.total || 0}</p>
                 </div>
-                <span className="text-4xl opacity-80">👥</span>
+                <Users className="w-10 h-10 opacity-80" />
               </div>
             </div>
             <div className="card p-6 bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
@@ -103,7 +104,7 @@ function DashboardContent() {
                   <p className="text-white/80 text-sm font-medium">Total Courses</p>
                   <p className="text-3xl font-bold mt-1">{stats.courses || 0}</p>
                 </div>
-                <span className="text-4xl opacity-80">📚</span>
+                <BookOpen className="w-10 h-10 opacity-80" />
               </div>
             </div>
             <div className="card p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white">
@@ -112,7 +113,7 @@ function DashboardContent() {
                   <p className="text-white/80 text-sm font-medium">Certificates</p>
                   <p className="text-3xl font-bold mt-1">{stats.certificates || 0}</p>
                 </div>
-                <span className="text-4xl opacity-80">🎓</span>
+                <GraduationCap className="w-10 h-10 opacity-80" />
               </div>
             </div>
             <div className="card p-6 bg-gradient-to-br from-amber-400 to-orange-500 text-white">
@@ -121,7 +122,7 @@ function DashboardContent() {
                   <p className="text-white/80 text-sm font-medium">Pending Mentors</p>
                   <p className="text-3xl font-bold mt-1">{stats.users?.pendingMentors || 0}</p>
                 </div>
-                <span className="text-4xl opacity-80">⏳</span>
+                <Clock className="w-10 h-10 opacity-80" />
               </div>
             </div>
           </div>
@@ -135,7 +136,7 @@ function DashboardContent() {
                   <p className="text-white/80 text-sm font-medium">Enrolled Courses</p>
                   <p className="text-3xl font-bold mt-1">{stats.courses?.length || 0}</p>
                 </div>
-                <span className="text-4xl opacity-80">📚</span>
+                <BookOpen className="w-10 h-10 opacity-80" />
               </div>
             </div>
             <div className="card p-6 bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
@@ -144,7 +145,7 @@ function DashboardContent() {
                   <p className="text-white/80 text-sm font-medium">Completed</p>
                   <p className="text-3xl font-bold mt-1">{stats.progress?.filter((p: any) => p.isComplete)?.length || 0}</p>
                 </div>
-                <span className="text-4xl opacity-80">✓</span>
+                <Check className="w-10 h-10 opacity-80" />
               </div>
             </div>
             <div className="card p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white">
@@ -153,7 +154,7 @@ function DashboardContent() {
                   <p className="text-white/80 text-sm font-medium">In Progress</p>
                   <p className="text-3xl font-bold mt-1">{stats.progress?.filter((p: any) => !p.isComplete)?.length || 0}</p>
                 </div>
-                <span className="text-4xl opacity-80">📊</span>
+                <BarChart3 className="w-10 h-10 opacity-80" />
               </div>
             </div>
           </div>
@@ -167,7 +168,7 @@ function DashboardContent() {
                   <p className="text-white/80 text-sm font-medium">My Courses</p>
                   <p className="text-3xl font-bold mt-1">{stats.courses?.length || 0}</p>
                 </div>
-                <span className="text-4xl opacity-80">📚</span>
+                <BookOpen className="w-10 h-10 opacity-80" />
               </div>
             </div>
             <div className="card p-6 bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
@@ -178,7 +179,7 @@ function DashboardContent() {
                     {stats.courses?.reduce((acc: number, c: any) => acc + (c._count?.assignments || 0), 0) || 0}
                   </p>
                 </div>
-                <span className="text-4xl opacity-80">👥</span>
+                <Users className="w-10 h-10 opacity-80" />
               </div>
             </div>
             <div className="card p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white">
@@ -189,7 +190,7 @@ function DashboardContent() {
                     {stats.courses?.reduce((acc: number, c: any) => acc + (c._count?.chapters || 0), 0) || 0}
                   </p>
                 </div>
-                <span className="text-4xl opacity-80">📖</span>
+                <BookOpen className="w-10 h-10 opacity-80" />
               </div>
             </div>
           </div>
@@ -205,8 +206,8 @@ function DashboardContent() {
               className="card card-hover p-6 group animate-fadeInUp"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${card.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                <span className="text-2xl">{card.icon}</span>
+              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${card.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform text-white`}>
+                {card.icon}
               </div>
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                 {card.title}
